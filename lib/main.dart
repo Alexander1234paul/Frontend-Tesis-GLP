@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_tesis_glp/routes/routes.dart';
+import 'package:frontend_tesis_glp/screens/contactos.dart';
+import 'package:frontend_tesis_glp/screens/screens.dart';
+import 'package:frontend_tesis_glp/screens/ubicacion.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(const MyApp());
 
@@ -7,13 +12,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return   const MaterialApp(
-      title: 'Material App',
-      home:  Scaffold(
-        body:  Center(
-          child: Text('Hello World'),
-        ),
-      ),
+    return  MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Material App',
+        initialRoute: 'loading',
+        routes: appRoutes,
+    
     );
   }
 }
