@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:frontend_tesis_glp/helpers/mostrar_alerta.dart';
 import 'package:frontend_tesis_glp/models/regsiter_response.dart';
 import 'package:frontend_tesis_glp/pages/cliente.dart';
 import 'package:frontend_tesis_glp/pages/distribuidor.dart';
@@ -56,23 +57,22 @@ class _formStartState extends State<formStart> {
           // _timerSeconds = 60;
         });
         _startTimer();
-      } else {}
-
-      return true;
+      } else {
+        mostrarAlerta(context, 'Error', response.message!);
+      }
     } catch (e) {
-      print(e.toString());
-      return false;
+      mostrarAlerta(context, 'Error', '');
     }
   }
 
   _verifyCode() async {
     String? codeText = codeKeyText.currentState!.value;
     try {
-      print('haciendos');
       RegisterResult response = await requestHttp.verifyCode(codeText!);
       if (response.statusCode == 200) {
         // Usuario ya registrado
         // print(object)
+        localstorage.guardarToken(response.token!);
         if (response.typeUser == 'Distribuidor') {
           // ignore: use_build_context_synchronously
           Navigator.push(
@@ -84,8 +84,6 @@ class _formStartState extends State<formStart> {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const ClientePage()));
         }
-
-        localstorage.guardarToken(response.token!);
       } else if (response.statusCode == 201) {
         // Usuario nuevo
         Navigator.push(context,

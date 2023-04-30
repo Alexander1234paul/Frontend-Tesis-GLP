@@ -4,6 +4,7 @@ class localStorage {
   final _storage = const FlutterSecureStorage();
 
   Future guardarToken(String token) async {
+    print('Token guardando... '+token);
     return await _storage.write(key: 'token', value: token);
   }
    Future<String?> getToken() async {
