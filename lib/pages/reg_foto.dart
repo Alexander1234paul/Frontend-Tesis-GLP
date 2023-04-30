@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 // ignore: camel_case_types
-class ubicacion extends StatelessWidget {
-  const ubicacion({super.key});
+class RegFoto extends StatelessWidget {
+  const RegFoto({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,25 +15,31 @@ class ubicacion extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-                // alignment: Alignment.center,
-
                 padding: const EdgeInsets.all(18.0),
                 child: const Text(
-                  'Habilite el acceso a la ubicación actual para que la aplicación funcione correctamente',
+                  'Agregue su foto',
                   style: TextStyle(fontSize: 20.0),
                   textAlign: TextAlign.center,
                 )),
-            const Center(
-              child: Image(image: AssetImage('assets/ubica.png')),
+            Center(
+              child: Transform.scale(
+                scale:
+                    0.5, // Establecer la escala a 0.5 para reducir a la mitad
+                child: const  Image(image:  AssetImage('assets/usuario.png')),
+              ),
             ),
-            const SizedBox(height: 50.0),
+            const Text(
+              'Añadir foto',
+              style: TextStyle(fontSize: 20.0),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 40.0),
             ElevatedButton(
               onPressed: () {
                 // Acción a realizar cuando se presiona el botón
               },
               style: ElevatedButton.styleFrom(
-                onPrimary: Colors.white, // Color del texto
-                shape: RoundedRectangleBorder(
+                foregroundColor: Colors.white, shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(
                       25.0), // Radio de borde redondeado de 20.0
                   side: const BorderSide(

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_tesis_glp/routes/routes.dart';
-import 'package:frontend_tesis_glp/screens/contactos.dart';
-import 'package:frontend_tesis_glp/screens/screens.dart';
-import 'package:frontend_tesis_glp/screens/ubicacion.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
+
 
 void main() => runApp(const MyApp());
 
@@ -12,12 +10,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Material App',
-        initialRoute: 'loading',
-        routes: appRoutes,
-    
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'sans'),
+      title: 'Material App',
+      initialRoute: 'login',
+      routes: appRoutes,
     );
   }
 }
