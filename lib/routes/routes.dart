@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend_tesis_glp/pages/Select_user.dart';
 import 'package:frontend_tesis_glp/pages/loading.dart';
 import 'package:frontend_tesis_glp/pages/Start.dart';
-import 'package:frontend_tesis_glp/pages/maps/screens.dart';
+import 'package:frontend_tesis_glp/pages/maps/gps_access_screen.dart';
+import 'package:frontend_tesis_glp/pages/maps/loading-screen.dart';
+import 'package:frontend_tesis_glp/pages/maps/map_screen.dart';
 import 'package:frontend_tesis_glp/pages/reg_email.dart';
 import 'package:frontend_tesis_glp/pages/reg_foto.dart';
 import 'package:frontend_tesis_glp/pages/reg_names.dart';
@@ -19,5 +21,6 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'reg_email': (_) => const RegEmail(),
   'reg_foto': (_) => const RegFoto(),
   'gps-access': (_) => const GpsAccessScreen(),
-  'maps': (_) => const MapScreen()
+  'maps': (_) => const MapScreen(),
+  'loadMap': (_) => const LoadingScreen(),
 };
