@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/gps/gps_bloc.dart';
+import 'package:frontend_tesis_glp/bloc/location/location_bloc.dart';
+import 'package:frontend_tesis_glp/bloc/map/map_bloc.dart';
 import 'package:frontend_tesis_glp/routes/routes.dart';
 import 'package:flutter/services.dart';
 
@@ -8,7 +10,15 @@ import 'package:flutter/services.dart';
 
 void main() {
   runApp(MultiBlocProvider(
-    providers: [BlocProvider(create: (context) => GpsBloc())],
+    providers: [
+      BlocProvider(create: (context) => GpsBloc()),
+      BlocProvider(
+        create: (context) => LocationBloc(),
+      ),
+      BlocProvider(
+        create: (context) => MapBloc(),
+      )
+    ],
     child: const MyApp(),
   ));
 }

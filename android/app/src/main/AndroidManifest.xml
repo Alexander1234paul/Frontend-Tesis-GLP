@@ -13,6 +13,9 @@
         android:label="frontend_tesis_glp"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC5fYTBQYC2Xrz1g5xpERFap8Y1BC6zIDs" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
