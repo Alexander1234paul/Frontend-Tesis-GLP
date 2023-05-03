@@ -22,7 +22,7 @@ void main() {
             MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context)),
       ),
       BlocProvider(
-          create: (context) => SearchBloc(trafficServices: TrafficService())),
+          create: (context) => SearchBloc(trafficService: TrafficService())),
     ],
     child: const MyApp(),
   ));

@@ -23,11 +23,10 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   late LocationBloc locationBloc;
 
-  late LatLng initialLocation;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
     locationBloc = BlocProvider.of<LocationBloc>(context);
     // locationBloc.getCurrentPosition();
     locationBloc.startFollowingUser();
@@ -35,7 +34,6 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     locationBloc.stopFollowingUser();
     super.dispose();
   }
@@ -45,27 +43,29 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       body: BlocBuilder<LocationBloc, LocationState>(
         builder: (context, locationState) {
-          if (locationState.lastKnowLocation == null) {
-            return const Center(
-              child: Text('Espere porfavor...'),
-            );
+
+          if (locationState.lastKnownLocation == null) {
+            return const Center(child: Text('Espere por favor...'));
           }
+
           return BlocBuilder<MapBloc, MapState>(
             builder: (context, mapState) {
-              Map<String, Polyline> polylines = Map.from(mapState.polylines);
-              if (!mapState.showMyRoute) {
+
+              Map<String, Polyline> polylines = Map.from( mapState.polylines );
+              if ( !mapState.showMyRoute ) {
                 polylines.removeWhere((key, value) => key == 'myRoute');
               }
+
               return SingleChildScrollView(
                 child: Stack(
                   children: [
-                    MapViews(
-                      initialLocation: locationState.lastKnowLocation!,
+                    MapView(
+                      initialLocation: locationState.lastKnownLocation!,
                       polylines: polylines.values.toSet(),
-                      //TODO tonones:
                     ),
+
                     const SearchBar(),
-                    const ManualMarker()
+                    const ManualMarker(),
                   ],
                 ),
               );
@@ -75,12 +75,13 @@ class _MapScreenState extends State<MapScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: const [
-            BtnToggleUserRoute(),
-            BtnCurrentLocation(),
-            BtnFollowUser()
-          ]),
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: const [
+          BtnToggleUserRoute(),
+          BtnFollowUser(),
+          BtnCurrentLocation(),
+        ],
+      ),
     );
   }
 }

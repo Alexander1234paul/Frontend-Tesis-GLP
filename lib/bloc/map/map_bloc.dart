@@ -20,45 +20,48 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   LatLng? mapCenter;
 
   StreamSubscription<LocationState>? locationStateSubscription;
+
   MapBloc({required this.locationBloc}) : super(const MapState()) {
-    on<OnMapIntializeEvent>(_onInitMap);
+    on<OnMapInitialzedEvent>(_onInitMap);
     on<OnStartFollowingUserEvent>(_onStartFollowingUser);
     on<OnStopFollowingUserEvent>(
-        (event, emit) => emit(state.copyWith(isfollowUser: false)));
-    on<UpdateUserPolylinesEvent>(_onPolylineNewPoint);
+        (event, emit) => emit(state.copyWith(isFollowingUser: false)));
+    on<UpdateUserPolylineEvent>(_onPolylineNewPoint);
     on<OnToggleUserRoute>(
         (event, emit) => emit(state.copyWith(showMyRoute: !state.showMyRoute)));
+
     on<DisplayPolylinesEvent>(
         (event, emit) => emit(state.copyWith(polylines: event.polylines)));
 
-    //
-    locationStateSubscription = locationBloc.stream.listen((LocationState) {
-      if (LocationState.lastKnowLocation != null) {
-        add(UpdateUserPolylinesEvent(LocationState.myLocationHistory));
+    locationStateSubscription = locationBloc.stream.listen((locationState) {
+      if (locationState.lastKnownLocation != null) {
+        add(UpdateUserPolylineEvent(locationState.myLocationHistory));
       }
-      //
-      if (!state.isfollowUser) return;
-      if (LocationState.lastKnowLocation == null) return;
-      moveCamera(LocationState.lastKnowLocation!);
+
+      if (!state.isFollowingUser) return;
+      if (locationState.lastKnownLocation == null) return;
+
+      moveCamera(locationState.lastKnownLocation!);
     });
   }
 
-  void _onInitMap(OnMapIntializeEvent event, Emitter<MapState> emit) {
+  void _onInitMap(OnMapInitialzedEvent event, Emitter<MapState> emit) {
     _mapController = event.controller;
     _mapController!.setMapStyle(jsonEncode(UberMap));
-    emit(state.copyWith(isMapInitialize: true));
+
+    emit(state.copyWith(isMapInitialized: true));
   }
 
   void _onStartFollowingUser(
       OnStartFollowingUserEvent event, Emitter<MapState> emit) {
-    emit(state.copyWith(isfollowUser: true));
+    emit(state.copyWith(isFollowingUser: true));
 
-    if (locationBloc.state.lastKnowLocation == null) return;
-    moveCamera(locationBloc.state.lastKnowLocation!);
+    if (locationBloc.state.lastKnownLocation == null) return;
+    moveCamera(locationBloc.state.lastKnownLocation!);
   }
 
   void _onPolylineNewPoint(
-      UpdateUserPolylinesEvent event, Emitter<MapState> emit) {
+      UpdateUserPolylineEvent event, Emitter<MapState> emit) {
     final myRoute = Polyline(
         polylineId: const PolylineId('myRoute'),
         color: Colors.black,
@@ -83,10 +86,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       endCap: Cap.roundCap,
     );
 
-    final curretPolylines = Map<String, Polyline>.from(state.polylines);
+    final curretPolylines = Map<String, Polyline>.from( state.polylines );
     curretPolylines['route'] = myRoute;
 
-    add(DisplayPolylinesEvent(curretPolylines));
+    add( DisplayPolylinesEvent( curretPolylines ) );
   }
 
   void moveCamera(LatLng newLocation) {
@@ -96,8 +99,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   @override
   Future<void> close() {
-    // TODO: implement close
-    locationStateSubscription!.cancel();
+    locationStateSubscription?.cancel();
     return super.close();
   }
 }

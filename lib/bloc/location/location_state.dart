@@ -1,26 +1,30 @@
 part of 'location_bloc.dart';
 
 class LocationState extends Equatable {
+
   final bool followingUser;
-  final LatLng? lastKnowLocation;
+  final LatLng? lastKnownLocation;
   final List<LatLng> myLocationHistory;
+  
+  
+  const LocationState({
+    this.followingUser = false,
+    this.lastKnownLocation,
+    myLocationHistory
+  }): myLocationHistory = myLocationHistory ?? const [];
 
-  //TODO
 
-  const LocationState(
-      {this.followingUser = false, this.lastKnowLocation, myLocationHistory})
-      : myLocationHistory = myLocationHistory ?? const [];
+  LocationState copyWith({
+    bool? followingUser,
+    LatLng? lastKnownLocation,
+    List<LatLng>? myLocationHistory,
+  }) => LocationState(
+    followingUser    : followingUser ?? this.followingUser,
+    lastKnownLocation: lastKnownLocation ?? this.lastKnownLocation,
+    myLocationHistory: myLocationHistory ?? this.myLocationHistory,
+  );
 
-  LocationState copyWith(
-          {bool? followingUser,
-          LatLng? lastKnowLocation,
-          List<LatLng>? myLocationHistory}) =>
-      LocationState(
-          followingUser: followingUser ?? this.followingUser,
-          lastKnowLocation: lastKnowLocation ?? this.lastKnowLocation,
-          myLocationHistory: myLocationHistory ?? this.myLocationHistory);
+  
   @override
-  //Para saber cuando hya unc ambio del state
-  List<Object?> get props =>
-      [followingUser, lastKnowLocation, myLocationHistory];
+  List<Object?> get props => [ followingUser, lastKnownLocation, myLocationHistory ];
 }

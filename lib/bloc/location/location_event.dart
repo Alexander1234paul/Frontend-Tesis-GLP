@@ -6,11 +6,12 @@ abstract class LocationEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
-class OnNewUserLocationEvent extends LocationEvent{
-  final LatLng newLocation;
 
-  OnNewUserLocationEvent(this.newLocation);
+
+class OnNewUserLocationEvent extends LocationEvent {
+  final LatLng newLocation;
+  const OnNewUserLocationEvent(this.newLocation);
 }
 
-class OnStartFollowingUser extends LocationEvent{}
-class OnStoptFollowingUser extends LocationEvent{}
+class OnStartFollowingUser extends LocationEvent {}
+class OnStopFollowingUser extends LocationEvent {}
