@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/gps/gps_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/location/location_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/map/map_bloc.dart';
+import 'package:frontend_tesis_glp/bloc/search/search_bloc.dart';
 import 'package:frontend_tesis_glp/routes/routes.dart';
 import 'package:flutter/services.dart';
+import 'package:frontend_tesis_glp/services/traffic_services.dart';
 
 // void main() => runApp(const MyApp());
 
@@ -18,7 +20,9 @@ void main() {
       BlocProvider(
         create: (context) =>
             MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context)),
-      )
+      ),
+      BlocProvider(
+          create: (context) => SearchBloc(trafficServices: TrafficService())),
     ],
     child: const MyApp(),
   ));

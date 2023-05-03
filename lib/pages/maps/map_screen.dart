@@ -7,6 +7,8 @@ import 'package:frontend_tesis_glp/bloc/location/location_bloc.dart';
 import 'package:frontend_tesis_glp/widgets/btn_follow_user.dart';
 import 'package:frontend_tesis_glp/widgets/btn_location.dart';
 import 'package:frontend_tesis_glp/widgets/btn_toggle_user_route.dart';
+import 'package:frontend_tesis_glp/widgets/manual_marker.dart';
+import 'package:frontend_tesis_glp/widgets/searchbart.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../widgets/map_view.dart';
@@ -61,7 +63,9 @@ class _MapScreenState extends State<MapScreen> {
                       initialLocation: locationState.lastKnowLocation!,
                       polylines: polylines.values.toSet(),
                       //TODO tonones:
-                    )
+                    ),
+                    const SearchBar(),
+                    const ManualMarker()
                   ],
                 ),
               );
