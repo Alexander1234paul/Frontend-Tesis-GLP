@@ -5,6 +5,7 @@ import 'package:frontend_tesis_glp/pages/Start.dart';
 import 'package:frontend_tesis_glp/pages/maps/gps_access_screen.dart';
 import 'package:frontend_tesis_glp/pages/maps/loading-screen.dart';
 import 'package:frontend_tesis_glp/pages/maps/map_screen.dart';
+import 'package:frontend_tesis_glp/pages/maps/test_marker_screen.dart';
 import 'package:frontend_tesis_glp/pages/reg_email.dart';
 import 'package:frontend_tesis_glp/pages/reg_foto.dart';
 import 'package:frontend_tesis_glp/pages/reg_names.dart';
@@ -23,4 +24,5 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'gps-access': (_) => const GpsAccessScreen(),
   'maps': (_) => const MapScreen(),
   'loadMap': (_) => const LoadingScreen(),
+  'testMarker': (_) => const TestMarkerScreen(),
 };
