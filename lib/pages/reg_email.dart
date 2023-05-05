@@ -1,10 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:frontend_tesis_glp/pages/cliente.dart';
 import 'package:frontend_tesis_glp/pages/distribuidor.dart';
+import 'package:frontend_tesis_glp/pages/maps/loading-screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
+
+import '../global/environment.dart';
 
 class RegEmail extends StatefulWidget {
   const RegEmail({Key? key}) : super(key: key);
@@ -24,7 +26,8 @@ class _RegEmailState extends State<RegEmail> {
   }
 
   Future<String> addEmail(BuildContext context, String email) async {
-    final url = Uri.parse('https://app-glp.herokuapp.com/addEmail');
+    final String urlMain = Environment.apiUrl;
+    final url = Uri.parse(urlMain + 'addEmail');
 
     String? token = await getToken();
     final response = await http.post(url,
@@ -35,13 +38,13 @@ class _RegEmailState extends State<RegEmail> {
     if (response.statusCode == 200) {
       // ignore: use_build_context_synchronously
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const ClientePage()));
+          MaterialPageRoute(builder: (context) => const LoadingScreen()));
 
       return responseData['message'];
     } else if (response.statusCode == 201) {
       // ignore: use_build_context_synchronously
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const DistribuidorPage()));
+          MaterialPageRoute(builder: (context) => const LoadingScreen()));
 
       return responseData['message'];
     } else {

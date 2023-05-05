@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
+import '../global/environment.dart';
+
 // ignore: camel_case_types
 class select_user extends StatelessWidget {
   const select_user({super.key});
@@ -14,7 +16,9 @@ class select_user extends StatelessWidget {
   }
 
   Future<String> addTypeUser(BuildContext context, String typeUser) async {
-    final url = Uri.parse('https://app-glp.herokuapp.com/addTypeUser');
+    final String urlMain = Environment.apiUrl;
+      final url = Uri.parse(urlMain + 'addTypeUser');
+    // final url = Uri.parse('https://app-glp.herokuapp.com/addTypeUser');
 
     String? token = await getToken();
     final response = await http.post(url,

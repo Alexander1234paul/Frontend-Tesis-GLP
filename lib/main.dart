@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'sans'),
       title: 'Material App',
-      initialRoute: 'loadMap',
+      initialRoute: 'loading',
       routes: appRoutes,
     );
   }

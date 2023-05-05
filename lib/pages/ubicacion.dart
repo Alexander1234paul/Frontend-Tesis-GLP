@@ -6,6 +6,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'dart:convert';
 
+import '../global/environment.dart';
+
 // ignore: camel_case_types
 class ubicacion extends StatelessWidget {
   const ubicacion({Key? key}) : super(key: key);
@@ -34,7 +36,9 @@ class ubicacion extends StatelessWidget {
 
   Future<String> getCorruntLocation(BuildContext context) async {
     try {
-      final url = Uri.parse('https://app-glp.herokuapp.com/addUbicacion');
+      final String urlMain = Environment.apiUrl;
+      final url = Uri.parse(urlMain + 'addUbicacion');
+      // final url = Uri.parse('https://app-glp.herokuapp.com/addUbicacion');
       String? token = await getToken();
       Position position = await determinarPosicion();
       final response = await http.post(url, headers: {
@@ -44,6 +48,7 @@ class ubicacion extends StatelessWidget {
         'longitud': position.longitude.toString(),
         'token': token
       });
+      // ignore: unused_local_variable
       var responseData =
           json.decode(response.body); // ignore: use_build_context_synchronously
       Navigator.push(

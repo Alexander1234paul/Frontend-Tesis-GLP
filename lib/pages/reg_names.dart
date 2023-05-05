@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
+import '../global/environment.dart';
+
 class RegNames extends StatefulWidget {
   const RegNames({Key? key}) : super(key: key);
 
@@ -26,7 +28,9 @@ class _RegNamesState extends State<RegNames> {
 
   Future<String> addNames(
       BuildContext context, String nombre, String apellido) async {
-    final url = Uri.parse('https://app-glp.herokuapp.com/addnames');
+        final String urlMain = Environment.apiUrl;
+      final url = Uri.parse(urlMain + 'addnames');
+    // final url = Uri.parse('https://app-glp.herokuapp.com/addnames');
 
     String? token = await getToken();
     String? nombres = '$nombre $apellido';
