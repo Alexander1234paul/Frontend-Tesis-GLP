@@ -39,10 +39,15 @@ class _ManualMarkerBody extends StatelessWidget {
     final locationBloc = BlocProvider.of<LocationBloc>(context);
     final mapBloc = BlocProvider.of<MapBloc>(context);
 
-    return SizedBox(
+    return Container(
+    
       width: size.width,
       height: size.height,
+      // color: Colors.red,
+      
+
       child: Stack(
+      
         children: [
           
           const Positioned(
@@ -71,7 +76,7 @@ class _ManualMarkerBody extends StatelessWidget {
               child: MaterialButton(
                 minWidth: size.width -120,
                 child: const Text('Confimar destino', style: TextStyle( color: Colors.white, fontWeight: FontWeight.w300 )),
-                color: Colors.black,
+                color: Color.fromARGB(255, 211, 5, 5),
                 elevation: 0,
                 height: 50,
                 shape: const StadiumBorder(),
@@ -117,7 +122,7 @@ class _BtnBack extends StatelessWidget {
       duration: const Duration( milliseconds: 300 ),
       child: CircleAvatar(
         maxRadius: 30,
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 144, 24, 24),
         child: IconButton(
           icon: const Icon( Icons.arrow_back_ios_new, color: Colors.black ),
           onPressed: () {

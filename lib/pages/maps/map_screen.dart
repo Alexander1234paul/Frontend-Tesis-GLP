@@ -38,30 +38,42 @@ class _MapScreenState extends State<MapScreen> {
     super.dispose();
   }
 
+// Método que construye el widget de la pantalla
   @override
   Widget build(BuildContext context) {
+// Retorna un Scaffold que contiene el cuerpo y los elementos flotantes del widget
     return Scaffold(
+// El cuerpo del widget es un BlocBuilder que escucha el estado de la ubicación del usuario
       body: BlocBuilder<LocationBloc, LocationState>(
+// Se construye el widget dependiendo del estado de la ubicación del usuario
         builder: (context, locationState) {
+// Si la ubicación del usuario es null, se muestra un mensaje de espera
           if (locationState.lastKnownLocation == null) {
             return const Center(child: Text('Espere por favor...'));
           }
-
+// Si la ubicación del usuario existe, se construye el widget con el estado del mapa
           return BlocBuilder<MapBloc, MapState>(
             builder: (context, mapState) {
+// Se crea una copia mutable del mapa de polilíneas del estado del mapa
               Map<String, Polyline> polylines = Map.from(mapState.polylines);
+// Si la opción de mostrar la ruta del usuario está desactivada, se remueve la polilínea de la ruta del mapa
               if (!mapState.showMyRoute) {
                 polylines.removeWhere((key, value) => key == 'myRoute');
               }
-
+// Se construye un SingleChildScrollView que contiene los elementos de la pantalla
               return SingleChildScrollView(
                 child: Stack(
                   children: [
+// El elemento principal de la pantalla es un MapView personalizado
                     MapView(
+// La ubicación inicial del mapa es la última ubicación conocida del usuario
                       initialLocation: locationState.lastKnownLocation!,
+// Las polilíneas a mostrar son las polilíneas del estado del mapa
                       polylines: polylines.values.toSet(),
+// Los marcadores a mostrar son los marcadores del estado del mapa
                       markers: mapState.markers.values.toSet(),
                     ),
+// También se muestra una barra de búsqueda y la opción de agregar marcadores manualmente
                     const SearchBar(),
                     const ManualMarker(),
                   ],
@@ -71,7 +83,9 @@ class _MapScreenState extends State<MapScreen> {
           );
         },
       ),
+// El botón flotante es un menú desplegable que contiene tres botones
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      // backgroundColor: Color.fromARGB(255, 0, 0, 0),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: const [

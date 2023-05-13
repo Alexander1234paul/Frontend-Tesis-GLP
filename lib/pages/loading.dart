@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_tesis_glp/models/regsiter_response.dart';
-import 'package:frontend_tesis_glp/pages/Login/Widgets/respaldo.dart';
+import 'package:frontend_tesis_glp/pages/Client/home.dart';
 import 'package:frontend_tesis_glp/pages/Start.dart';
 import 'package:frontend_tesis_glp/pages/cliente.dart';
 import 'package:frontend_tesis_glp/pages/distribuidor.dart';
@@ -33,10 +33,10 @@ Future<void> checkLoginState(BuildContext context) async {
   if (registerResult.statusCode == 200) {
     if (registerResult.typeUser == 'Distribuidor') {
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const LoadingScreen()));
+          MaterialPageRoute(builder: (context) => const HomeClient()));
     } else {
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const LoadingScreen()));
+          MaterialPageRoute(builder: (context) => const HomeClient()));
     }
 
     // El usuario ya ha iniciado sesión, realiza alguna acción aquí

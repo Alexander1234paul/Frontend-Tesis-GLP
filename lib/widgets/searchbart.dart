@@ -14,11 +14,9 @@ class SearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        return state.displayManualMarker
-            ? const SizedBox()
-            : FadeInDown(
-                duration: const Duration(milliseconds: 300),
-                child: const _SearchBarBody());
+        return FadeInDown(
+            duration: const Duration(milliseconds: 300),
+            child: const _SearchBarBody());
       },
     );
   }
@@ -38,7 +36,8 @@ class _SearchBarBody extends StatelessWidget {
     }
 
     if (result.position != null) {
-      final destination = await searchBloc.getCoorsStartToEnd( locationBloc.state.lastKnownLocation!, result.position! );
+      final destination = await searchBloc.getCoorsStartToEnd(
+          locationBloc.state.lastKnownLocation!, result.position!);
       await mapBloc.drawRoutePolyline(destination);
     }
   }
@@ -46,32 +45,27 @@ class _SearchBarBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
-        margin: const EdgeInsets.only(top: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        width: double.infinity,
-        child: GestureDetector(
-            onTap: () async {
-              final result = await showSearch(
-                  context: context, delegate: SearchDestinationDelegate());
-              if (result == null) return;
+      child: TextFormField(
+        readOnly: true, 
+       // Deshabilita la escritura en el TextFormField
+        onTap: () async {
+          final result = await showSearch(
+              context: context, delegate: SearchDestinationDelegate());
+          if (result == null) return;
 
-              onSearchResults(context, result);
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
-              child: const Text('¿Dónde quieres ir?',
-                  style: TextStyle(color: Colors.black87)),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(100),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 5,
-                        offset: Offset(0, 5))
-                  ]),
-            )),
+          onSearchResults(context, result);
+        },
+        decoration: InputDecoration(
+          filled: true,
+          // fillColor: Color.fromARGB(66, 226, 31, 31),
+          
+          hintText: 'Mi ubicación',
+          labelStyle: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+            // Acceder a la propiedad size de InputText
+          ), // Marcador de posición
+        ),
       ),
     );
   }

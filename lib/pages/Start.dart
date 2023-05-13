@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_tesis_glp/global/environment.dart';
+import 'package:frontend_tesis_glp/pages/Client/home.dart';
 import 'package:frontend_tesis_glp/pages/Login/Widgets/form_start.dart';
 import 'package:frontend_tesis_glp/pages/cliente.dart';
 import 'package:frontend_tesis_glp/pages/distribuidor.dart';
@@ -73,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         // ignore: use_build_context_synchronously
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const ClientePage()));
+            MaterialPageRoute(builder: (context) => const HomeClient()));
       }
 
       _guardarToken(responseData['token']);

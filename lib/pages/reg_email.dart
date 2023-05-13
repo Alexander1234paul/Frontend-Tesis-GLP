@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_tesis_glp/pages/cliente.dart';
+import 'package:frontend_tesis_glp/pages/Client/home.dart';
 import 'package:frontend_tesis_glp/pages/distribuidor.dart';
 import 'package:frontend_tesis_glp/pages/maps/loading-screen.dart';
 import 'package:http/http.dart' as http;
@@ -44,7 +44,7 @@ class _RegEmailState extends State<RegEmail> {
     } else if (response.statusCode == 201) {
       // ignore: use_build_context_synchronously
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const LoadingScreen()));
+          MaterialPageRoute(builder: (context) => const HomeClient()));
 
       return responseData['message'];
     } else {
