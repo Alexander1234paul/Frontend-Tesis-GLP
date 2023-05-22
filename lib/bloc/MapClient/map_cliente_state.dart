@@ -1,10 +1,13 @@
 part of 'map_cliente_bloc.dart';
 
-abstract class MapClienteState extends Equatable {
-  const MapClienteState();
-  
-  @override
-  List<Object> get props => [];
-}
+class MapClienteState extends Equatable {
+  final bool isSlide;
 
-class MapClienteInitial extends MapClienteState {}
+  const MapClienteState({this.isSlide = false});
+
+  MapClienteState copyWith({bool? isSlide}) =>
+      MapClienteState(isSlide: isSlide ?? this.isSlide);
+
+  @override
+  List<Object> get props => [isSlide];
+}

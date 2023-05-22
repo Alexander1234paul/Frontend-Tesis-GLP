@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:frontend_tesis_glp/pages/Client/home.dart';
+import 'package:frontend_tesis_glp/pages/Dealer/home.dart';
 import 'package:frontend_tesis_glp/pages/Select_user.dart';
 import 'package:frontend_tesis_glp/pages/loading.dart';
 import 'package:frontend_tesis_glp/pages/Start.dart';
@@ -29,7 +30,5 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'loadMap': (_) => const LoadingScreen(),
   'testMarker': (_) => const TestMarkerScreen(),
   'HomeClient': (_) => const HomeClient(),
-
-
-
+  'HomeDistribuidor': (_) => const HomeDistribuidor(),
 };

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend_tesis_glp/bloc/MapClient/map_cliente_bloc.dart';
 import 'package:frontend_tesis_glp/utils/responsive.dart';
 import 'package:frontend_tesis_glp/widgets/input_text_login.dart';
 import 'package:frontend_tesis_glp/widgets/searchbart.dart';
@@ -20,6 +21,7 @@ class FormPedido extends StatefulWidget {
 class _FormPedidoState extends State<FormPedido> {
   final LocationBloc locationBloc = LocationBloc();
   final RequestHttp requestHttp = RequestHttp();
+  final MapClienteBloc mapClienteBloc = MapClienteBloc();
 
   int numCilindros = 1;
 
@@ -27,7 +29,8 @@ class _FormPedidoState extends State<FormPedido> {
     await requestHttp.newOrderCliente(numCilindros.toString(),
         ubicacion.longitude.toString(), ubicacion.latitude.toString());
     //
-    
+
+    mapClienteBloc.add(isTrueSlideEvent());
   }
 
   @override
@@ -35,7 +38,7 @@ class _FormPedidoState extends State<FormPedido> {
     Responsive responsive = Responsive.of(context);
     double a = 4;
 
-    return BlocBuilder<LocationBloc, LocationState>(
+    return BlocBuilder  <LocationBloc, LocationState>(
       builder: (context, state) {
         return SafeArea(
           child: Container(

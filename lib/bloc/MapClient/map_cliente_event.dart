@@ -6,3 +6,7 @@ abstract class MapClienteEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class isTrueSlideEvent extends MapClienteEvent {}
+class isFalseSlideEvent extends MapClienteEvent {}
+

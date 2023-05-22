@@ -1,37 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../bloc/MapClient/map_cliente_bloc.dart';
 
 class Slide extends StatelessWidget {
   const Slide({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 260,
-      height: 800,
-      color: Color.fromARGB(255, 255, 255, 255),
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          const _DrawerHeader(),
-          ListTile(
-            leading: const Icon(Icons.pages_outlined),
-            title: const Text('Home'),
-            onTap: () {},
+    final screenSize = MediaQuery.of(context).size;
+    final mapClienteBloc = BlocProvider.of<MapClienteBloc>(context);
+
+    return Row(
+      children: [
+        Container(
+          width: 290,
+          height: screenSize.height,
+          color: Color.fromARGB(255, 255, 255, 255),
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const _DrawerHeader(),
+              ListTile(
+                leading: const Icon(Icons.pages_outlined),
+                title: const Text('Home'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.people_outline),
+                title: const Text('People'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: const Icon(Icons.settings_outlined),
+                title: const Text('Settings'),
+                onTap: () {
+                  // Navigator.pop(context);
+                },
+              ),
+            ],
           ),
-          ListTile(
-            leading: const Icon(Icons.people_outline),
-            title: const Text('People'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings_outlined),
-            title: const Text('Settings'),
+        ),
+        Expanded(
+          child: GestureDetector(
             onTap: () {
-              // Navigator.pop(context);
+              print('Se hizo clic en el segundo contenedor');
+              mapClienteBloc.add(isFalseSlideEvent());
             },
+            child: Container(
+              width: 100,
+              height: screenSize.height,
+              color: Colors.transparent,
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

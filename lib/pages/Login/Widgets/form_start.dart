@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend_tesis_glp/helpers/mostrar_alerta.dart';
 import 'package:frontend_tesis_glp/models/regsiter_response.dart';
+import 'package:frontend_tesis_glp/pages/Dealer/home.dart';
 import 'package:frontend_tesis_glp/pages/cliente.dart';
-import 'package:frontend_tesis_glp/pages/distribuidor.dart';
 import 'package:frontend_tesis_glp/pages/ubicacion.dart';
 import 'package:frontend_tesis_glp/services/request.dart';
 import 'package:frontend_tesis_glp/utils/local_storage.dart';
@@ -78,7 +78,7 @@ class _formStartState extends State<formStart> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const DistribuidorPage()));
+                  builder: (context) => const HomeDistribuidor()));
         } else {
           // ignore: use_build_context_synchronously
           Navigator.push(context,

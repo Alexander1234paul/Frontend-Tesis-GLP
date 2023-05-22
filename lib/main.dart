@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend_tesis_glp/bloc/MapClient/map_cliente_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/gps/gps_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/location/location_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/map/map_bloc.dart';
@@ -23,6 +24,8 @@ void main() {
       ),
       BlocProvider(
           create: (context) => SearchBloc(trafficService: TrafficService())),
+    BlocProvider(
+          create: (context) => MapClienteBloc()),
     ],
     child: const MyApp(),
   ));

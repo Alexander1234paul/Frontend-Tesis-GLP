@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_tesis_glp/pages/cliente.dart';
-import 'package:frontend_tesis_glp/pages/distribuidor.dart';
 import 'package:frontend_tesis_glp/pages/reg_email.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

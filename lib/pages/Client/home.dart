@@ -6,6 +6,7 @@ import 'package:frontend_tesis_glp/widgets/manual_marker.dart';
 import 'package:frontend_tesis_glp/widgets/map_view.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../bloc/MapClient/map_cliente_bloc.dart';
 import '../../bloc/location/location_bloc.dart';
 import '../../bloc/map/map_bloc.dart';
 import 'Widgets/formPedido.dart';
@@ -48,11 +49,20 @@ class _HomeClientState extends State<HomeClient> {
                         initialLocation: locationState.lastKnownLocation!,
                         polylines: polylines.values.toSet(),
                         markers: mapState.markers.values.toSet()),
-                    FormPedido(),
-                    BtnElevate(),
-                    // Slide()
-                    // ManualMarker()
-                    
+                    BlocBuilder<MapClienteBloc, MapClienteState>(
+                      builder: (context, state) {
+                        return !state.isSlide
+                            ? Stack(
+                                children: [
+                                  FormPedido(),
+                                  BtnElevate(),
+                                ],
+                              )
+                            : Slide();
+                      },
+                    ),
+
+                    //  ManualMarker()
                   ],
                 ),
               );
