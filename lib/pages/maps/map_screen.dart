@@ -10,6 +10,8 @@ import 'package:frontend_tesis_glp/widgets/btn_toggle_user_route.dart';
 import 'package:frontend_tesis_glp/widgets/manual_marker.dart';
 import 'package:frontend_tesis_glp/widgets/searchbart.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/material.dart' as material;
+
 
 import '../../widgets/map_view.dart';
 
@@ -74,7 +76,7 @@ class _MapScreenState extends State<MapScreen> {
                       markers: mapState.markers.values.toSet(),
                     ),
 // También se muestra una barra de búsqueda y la opción de agregar marcadores manualmente
-                    const SearchBar(),
+                    const material.SearchBar(),
                     const ManualMarker(),
                   ],
                 ),

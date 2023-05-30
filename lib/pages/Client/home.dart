@@ -52,13 +52,13 @@ class _HomeClientState extends State<HomeClient> {
                     BlocBuilder<MapClienteBloc, MapClienteState>(
                       builder: (context, state) {
                         return !state.isSlide
-                            ? Stack(
-                                children: [
+                            ? const Stack(
+                                children:  [
                                   FormPedido(),
                                   BtnElevate(),
                                 ],
                               )
-                            : Slide();
+                            : const Slide();
                       },
                     ),
 

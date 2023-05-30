@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/MapClient/map_cliente_bloc.dart';
 import 'package:frontend_tesis_glp/utils/responsive.dart';
 import 'package:frontend_tesis_glp/widgets/input_text_login.dart';
-import 'package:frontend_tesis_glp/widgets/searchbart.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../bloc/location/location_bloc.dart';

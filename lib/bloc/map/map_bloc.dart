@@ -5,7 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_tesis_glp/bloc/location/location_bloc.dart';
-import 'package:frontend_tesis_glp/helpers/custom_image_marker.dart';
 import 'package:frontend_tesis_glp/helpers/widgets_to_marker.dart';
 import 'package:frontend_tesis_glp/models/route_destination.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart'
@@ -13,7 +12,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart'
         CameraUpdate,
         Cap,
         GoogleMapController,
-        InfoWindow,
         LatLng,
         Marker,
         MarkerId,
