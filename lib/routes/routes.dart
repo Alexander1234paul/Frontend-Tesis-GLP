@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend_tesis_glp/pages/Client/home.dart';
 import 'package:frontend_tesis_glp/pages/Dealer/home.dart';
 import 'package:frontend_tesis_glp/pages/Select_user.dart';
+import 'package:frontend_tesis_glp/pages/home.dart';
 import 'package:frontend_tesis_glp/pages/loading.dart';
 import 'package:frontend_tesis_glp/pages/Start.dart';
 import 'package:frontend_tesis_glp/pages/maps/gps_access_screen.dart';
@@ -31,4 +32,5 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'testMarker': (_) => const TestMarkerScreen(),
   'HomeClient': (_) => const HomeClient(),
   'HomeDistribuidor': (_) => const HomeDistribuidor(),
+  'home': (_) => HomePage(),
 };

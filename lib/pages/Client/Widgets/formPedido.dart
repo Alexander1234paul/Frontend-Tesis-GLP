@@ -6,6 +6,7 @@ import 'package:frontend_tesis_glp/widgets/input_text_login.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../bloc/location/location_bloc.dart';
+import '../../../bloc/socket/socket_bloc.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/request.dart';
 import '../../../widgets/roudend_button.dart';
@@ -18,6 +19,7 @@ class FormPedido extends StatefulWidget {
 }
 
 class _FormPedidoState extends State<FormPedido> {
+  final AuthService authService = AuthService();
   final LocationBloc locationBloc = LocationBloc();
   final RequestHttp requestHttp = RequestHttp();
   final MapClienteBloc mapClienteBloc = MapClienteBloc();
@@ -27,7 +29,16 @@ class _FormPedidoState extends State<FormPedido> {
   void _submit(LatLng ubicacion) async {
     await requestHttp.newOrderCliente(numCilindros.toString(),
         ubicacion.longitude.toString(), ubicacion.latitude.toString());
-    //
+
+    String? token = await authService.getToken();
+
+    final socketBloc = BlocProvider.of<SocketBloc>(context);
+    socketBloc.socket.emit('nuevo-pedido', {
+      'token': token,
+      'latitud': ubicacion.longitude.toString(),
+      'longitud': ubicacion.latitude.toString(),
+      'numCilindro': numCilindros.toString(),
+    });
 
     mapClienteBloc.add(isTrueSlideEvent());
   }
@@ -37,14 +48,14 @@ class _FormPedidoState extends State<FormPedido> {
     Responsive responsive = Responsive.of(context);
     double a = 4;
 
-    return BlocBuilder  <LocationBloc, LocationState>(
+    return BlocBuilder<LocationBloc, LocationState>(
       builder: (context, state) {
         return SafeArea(
           child: Container(
-            margin: EdgeInsets.only(top: (responsive.height / 2) * 1.22),
+            margin: EdgeInsets.only(top: (responsive.height / 2) * 1.12),
             padding: EdgeInsets.symmetric(horizontal: 30),
             width: double.infinity,
-            height: responsive.height * 0.35,
+            height: responsive.height * 0.40,
             decoration: BoxDecoration(
               border: Border(
                 top: BorderSide(

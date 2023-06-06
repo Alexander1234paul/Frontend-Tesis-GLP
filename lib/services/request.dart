@@ -1,9 +1,13 @@
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend_tesis_glp/global/environment.dart';
 import 'package:frontend_tesis_glp/models/regsiter_response.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:convert';
 
+import '../bloc/socket/socket_bloc.dart';
+import '../models/places_models.dart';
 import 'auth_service.dart';
 
 class RequestHttp {
@@ -67,16 +71,33 @@ class RequestHttp {
   }
 
   Future newOrderCliente(
-      String numCilindros, String latitud, String longitud) async {
+    String numCilindros,
+    String latitud,
+    String longitud,
+  ) async {
     try {
-      final url = Uri.parse(urlMain + 'newOrderClient');
+      // final url = Uri.parse(urlMain + 'newOrderClient');
       String? token = await authService.getToken();
-      final response = await http.post(url,
-          body: {'token': token, 'latitud': latitud, 'longitud': longitud,'numCilindro':numCilindros});
-      print(numCilindros);
-      print(longitud);
-      print(latitud);
-      print(numCilindros);
+      // final response = await http.post(url, body: {
+      //   'token': token,
+      //   'latitud': latitud,
+      //   'longitud': longitud,
+      //   'numCilindro': numCilindros
+      // });
+      // print(numCilindros);
+      // print(longitud);
+      // print(latitud);
+      // print(numCilindros);
+
+      // final socketBloc = BlocProvider.of<SocketBloc>(context as BuildContext);
+
+      // socketBloc.socket.emit('nuevo-pedido', {
+      //   'token': token,
+      //   'latitud': latitud,
+      //   'longitud': longitud,
+      //   'numCilindro': numCilindros
+      // });
+
       // final response = await http.post(url, body: {'codigoVerificacion': code});
 
       // var responseData = json.decode(response.body);
