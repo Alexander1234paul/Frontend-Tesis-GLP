@@ -32,5 +32,5 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'testMarker': (_) => const TestMarkerScreen(),
   'HomeClient': (_) => const HomeClient(),
   'HomeDistribuidor': (_) => const HomeDistribuidor(),
-  'home': (_) => HomePage(),
+  // 'home': (_) => HomePage(),
 };

@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
 import '../../bloc/socket/socket_bloc.dart';
-
 class HomeDistribuidor extends StatefulWidget {
   const HomeDistribuidor({Key? key}) : super(key: key);
 
@@ -16,6 +15,18 @@ class HomeDistribuidor extends StatefulWidget {
 
 class _HomeDistribuidorState extends State<HomeDistribuidor> {
   bool isLeftSelected = true;
+  late SocketBloc _socketBloc;
+  bool _showPopup = false;
+  int _countdown = 10;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _socketBloc = BlocProvider.of<SocketBloc>(context);
+    _socketBloc.add(ConnectEvent());
+    _startCountdownTimer();
+  }
 
   void toggleSelection() {
     setState(() {
@@ -23,72 +34,121 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
     });
   }
 
-  List<dynamic> dataList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // fetchData();
+  void _startCountdownTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+      if (_countdown > 0) {
+        setState(() {
+          _countdown--;
+        });
+      } else {
+        _timer.cancel();
+        _closePopup();
+      }
+    });
   }
 
-  // Future<void> fetchData() async {
-  //   final response =
-  //       await http.get(Uri.parse('https://glpapp.fly.dev/getOrderPendientes'));
+  void _showPopupWindow(dynamic registro) {
+    _showPopup = true;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            title: Text('Detalle del último registro'),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Nombre: ${registro['Cliente']['nombre']}'),
+                Text('Fecha: ${registro['Cliente']['fecha']}'),
+                Text('Cilindros: ${registro['Cliente']['numCilindro']}'),
+                // Agrega aquí otros campos que desees mostrar
 
-  //   if (response.statusCode == 200) {
-  //     final data = jsonDecode(response.body);
-  //     setState(() {
-  //       dataList = data['result'];
-  //     });
-  //   } else {
-  //     // Manejar el caso de error al obtener los datos de la API
-  //     print('Error al obtener los datos de la API');
-  //   }
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SocketBloc, SocketState>(
-      builder: (context, state) {
-        final List<dynamic> pedidos = state.pedidos ?? [];
-        return Scaffold(
-          appBar: appBar(),
-          body: ListView.builder(
-            itemCount: pedidos.length,
-            itemBuilder: (context, index) => ListTile(
-              leading: CircleAvatar(
-                child: Text(pedidos[index]['estado'].substring(0, 2)),
-                backgroundColor: Colors.blue[100],
-              ),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Fecha: ${pedidos[index]['Cliente']['fecha']}'),
-                  Text(
-                      'Num. Cilindro: ${pedidos[index]['Cliente']['numCilindro']}'),
-                ],
-              ),
-              trailing: Text(
-                '${pedidos[index]['estado']}',
-                style: TextStyle(fontSize: 20),
-              ),
+                //  Text('${pedidos[index]['Cliente']['nombre']}'),
+                //     Text('Fecha: ${pedidos[index]['Cliente']['fecha']}'),
+                //      Text('Cilindros: ${pedidos[index]['Cliente']['numCilindro']}'),
+              ],
             ),
+            actions: [
+              ElevatedButton(
+                onPressed: _acceptOrder,
+                child: Text('Aceptar'),
+              ),
+              ElevatedButton(
+                onPressed: _rejectOrder,
+                child: Text('Rechazar'),
+              ),
+            ],
           ),
-          bottomNavigationBar: BottonBar(),
         );
       },
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: appBar(),
-  //     body: const Text('data'),
-  //   bottomNavigationBar: BottonBar(),
+  void _closePopup() {
+    setState(() {
+      _showPopup = false;
+    });
+    Navigator.of(context).pop();
+  }
 
-  //   );
-  // }
+  void _acceptOrder() {
+    // Lógica para aceptar el pedido
+    _closePopup();
+  }
+
+  void _rejectOrder() {
+    // Lógica para rechazar el pedido
+    _closePopup();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<SocketBloc, SocketState>(
+      listener: (context, state) {
+        if (state.pedidos.isNotEmpty) {
+          _showPopupWindow(state.pedidos.last);
+        }
+      },
+      child: Scaffold(
+        appBar: appBar(),
+        body: BlocBuilder<SocketBloc, SocketState>(
+          builder: (context, state) {
+            final List<dynamic> pedidos = state.pedidos ?? [];
+            return ListView.builder(
+              itemCount: pedidos.length,
+              itemBuilder: (context, index) => ListTile(
+                leading: CircleAvatar(
+                  child: Text(pedidos[index]['estado'].substring(0, 2)),
+                  backgroundColor: Colors.blue[100],
+                ),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${pedidos[index]['Cliente']['nombre']}'),
+                    Text('Fecha: ${pedidos[index]['Cliente']['fecha']}'),
+                     Text('Cilindros: ${pedidos[index]['Cliente']['numCilindro']}'),
+                  ],
+                ),
+                trailing: Text(
+                  '${pedidos[index]['estado']}',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+            );
+          },
+        ),
+        bottomNavigationBar: BottonBar(),
+      ),
+    );
+  }
 
   AppBar appBar() {
     return AppBar(
@@ -117,7 +177,6 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
                 left: isLeftSelected ? 0 : 75,
                 right: isLeftSelected ? 75 : 0,
                 child: Container(
-                  // padding: const EdgeInsets.symmetric(horizontal: 1),
                   decoration: BoxDecoration(
                     color: isLeftSelected
                         ? Colors.red
@@ -145,8 +204,8 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
 
 class BottonBar extends StatelessWidget {
   const BottonBar({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

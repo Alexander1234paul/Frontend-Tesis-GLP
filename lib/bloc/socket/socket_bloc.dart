@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import '../../global/environment.dart';
 import '../../models/band.dart';
 import '../../models/pedido.dart';
 
@@ -18,13 +19,16 @@ enum ServerStatus {
 
 class SocketBloc extends Bloc<SocketEvent, SocketState> {
   final IO.Socket socket;
+  final String urlMain = Environment.apiUrl;
 
   SocketBloc()
       // : socket = IO.io('http://10.0.2.2:3000', <String, dynamic>{
-              : socket = IO.io('https://glpapp.fly.dev/', <String, dynamic>{
 
+      : socket = IO.io('https://glpapp.fly.dev/', <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': true,
+          'forceNew': true,
+          'extraHeaders': {'x-token': 'asmkdmk'}
         }),
         super(SocketState(ServerStatus.Connecting)) {
     on<ConnectEvent>((event, emit) {
@@ -35,6 +39,9 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
       emit(SocketState(ServerStatus.Offline));
     });
 
+    on<GetPedidosEvent>((event, emit) {
+      emit(state.copyWith(pedidos: event.pedidos));
+    });
 
     socket.on('connect', (_) {
       add(ConnectEvent());
@@ -52,11 +59,8 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
     socket.on('lista-pedidos', (payload) {
       print(payload['pedidos']);
 
-       List<dynamic> jsonData = payload['pedidos'] ?? [];// Accede a 'pedidos' en el mapa 'payload'
-       // Decodifica el primer elemento de 'jsonData'
-      // print(jsonData);
-      add(getPedidos(
-          jsonData)); // Pasa 'jsonData' como argumento en lugar de 'pedidos'
+      List<dynamic> jsonData = payload['pedidos'] ?? [];
+      add(GetPedidosEvent(jsonData));
     });
 
     socket.connect();
