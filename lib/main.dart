@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend_tesis_glp/bloc/MapClient/map_cliente_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/gps/gps_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/location/location_bloc.dart';
@@ -11,8 +12,17 @@ import 'package:flutter/services.dart';
 import 'package:frontend_tesis_glp/services/traffic_services.dart';
 
 // void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
+  Future<String?> getToken() async {
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'token');
+    return token;
+  }
+
+  final token = await getToken();
+
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(create: (context) => GpsBloc()),
@@ -24,13 +34,15 @@ void main() {
             MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context)),
       ),
       BlocProvider(
-          create: (context) => SearchBloc(trafficService: TrafficService())),
+        create: (context) => SearchBloc(trafficService: TrafficService()),
+      ),  
       BlocProvider(create: (context) => MapClienteBloc()),
-      BlocProvider(create: (context) => SocketBloc()),
+      BlocProvider(create: (context) => SocketBloc(token!)),
     ],
     child: const MyApp(),
   ));
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

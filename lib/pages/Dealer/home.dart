@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
 import '../../bloc/socket/socket_bloc.dart';
+
 class HomeDistribuidor extends StatefulWidget {
   const HomeDistribuidor({Key? key}) : super(key: key);
 
@@ -13,27 +14,30 @@ class HomeDistribuidor extends StatefulWidget {
   State<HomeDistribuidor> createState() => _HomeDistribuidorState();
 }
 
+// Pantalla principal del distribuidor
 class _HomeDistribuidorState extends State<HomeDistribuidor> {
-  bool isLeftSelected = true;
-  late SocketBloc _socketBloc;
-  bool _showPopup = false;
-  int _countdown = 10;
-  late Timer _timer;
+  bool isLeftSelected = true; // Variable para controlar la selección izquierda/derecha
+  late SocketBloc _socketBloc; // Instancia del bloque de sockets
+  bool _showPopup = false; // Variable para mostrar/ocultar ventana emergente
+  int _countdown = 10; // Contador para la cuenta regresiva
+  late Timer _timer; // Temporizador para la cuenta regresiva
 
   @override
   void initState() {
     super.initState();
-    _socketBloc = BlocProvider.of<SocketBloc>(context);
-    _socketBloc.add(ConnectEvent());
-    _startCountdownTimer();
+    _socketBloc = BlocProvider.of<SocketBloc>(context); // Obtener el bloque de sockets del contexto
+    _socketBloc.add(ConnectEvent()); // Iniciar la conexión con el servidor de sockets
+    _startCountdownTimer(); // Iniciar el temporizador de cuenta regresiva
   }
 
+  // Método para alternar la selección izquierda/derecha
   void toggleSelection() {
     setState(() {
       isLeftSelected = !isLeftSelected;
     });
   }
 
+  // Método para iniciar el temporizador de cuenta regresiva
   void _startCountdownTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
       if (_countdown > 0) {
@@ -47,6 +51,7 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
     });
   }
 
+  // Método para mostrar una ventana emergente con los detalles de un registro
   void _showPopupWindow(dynamic registro) {
     _showPopup = true;
     showDialog(
@@ -63,11 +68,6 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
                 Text('Nombre: ${registro['Cliente']['nombre']}'),
                 Text('Fecha: ${registro['Cliente']['fecha']}'),
                 Text('Cilindros: ${registro['Cliente']['numCilindro']}'),
-                // Agrega aquí otros campos que desees mostrar
-
-                //  Text('${pedidos[index]['Cliente']['nombre']}'),
-                //     Text('Fecha: ${pedidos[index]['Cliente']['fecha']}'),
-                //      Text('Cilindros: ${pedidos[index]['Cliente']['numCilindro']}'),
               ],
             ),
             actions: [
@@ -86,6 +86,7 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
     );
   }
 
+  // Método para cerrar la ventana emergente
   void _closePopup() {
     setState(() {
       _showPopup = false;
@@ -93,11 +94,13 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
     Navigator.of(context).pop();
   }
 
+  // Método para aceptar un pedido
   void _acceptOrder() {
     // Lógica para aceptar el pedido
     _closePopup();
   }
 
+  // Método para rechazar un pedido
   void _rejectOrder() {
     // Lógica para rechazar el pedido
     _closePopup();
@@ -105,7 +108,7 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer.cancel(); // Cancelar el temporizador cuando el widget se elimina
     super.dispose();
   }
 
@@ -114,11 +117,11 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
     return BlocListener<SocketBloc, SocketState>(
       listener: (context, state) {
         if (state.pedidos.isNotEmpty) {
-          _showPopupWindow(state.pedidos.last);
+          _showPopupWindow(state.pedidos.last); // Mostrar la ventana emergente con el último pedido
         }
       },
       child: Scaffold(
-        appBar: appBar(),
+        appBar: appBar(), // Construir la barra de aplicaciones
         body: BlocBuilder<SocketBloc, SocketState>(
           builder: (context, state) {
             final List<dynamic> pedidos = state.pedidos ?? [];
@@ -134,7 +137,8 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
                   children: [
                     Text('${pedidos[index]['Cliente']['nombre']}'),
                     Text('Fecha: ${pedidos[index]['Cliente']['fecha']}'),
-                     Text('Cilindros: ${pedidos[index]['Cliente']['numCilindro']}'),
+                    Text(
+                        'Cilindros: ${pedidos[index]['Cliente']['numCilindro']}'),
                   ],
                 ),
                 trailing: Text(
@@ -145,11 +149,12 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
             );
           },
         ),
-        bottomNavigationBar: BottonBar(),
+        bottomNavigationBar: BottonBar(), // Barra de navegación inferior
       ),
     );
   }
 
+  // Construir la barra de aplicaciones personalizada
   AppBar appBar() {
     return AppBar(
       backgroundColor: Color.fromARGB(255, 188, 185, 179),
@@ -168,7 +173,7 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
           borderRadius: BorderRadius.circular(20),
         ),
         child: InkWell(
-          onTap: toggleSelection,
+          onTap: toggleSelection, // Alternar la selección izquierda/derecha al hacer clic
           child: Stack(
             children: [
               AnimatedPositioned(
@@ -202,6 +207,7 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
   }
 }
 
+// Barra de navegación inferior
 class BottonBar extends StatelessWidget {
   const BottonBar({
     Key? key,

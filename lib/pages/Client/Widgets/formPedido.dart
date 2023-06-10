@@ -19,6 +19,14 @@ class FormPedido extends StatefulWidget {
 }
 
 class _FormPedidoState extends State<FormPedido> {
+  late SocketBloc _socketBloc;
+  @override
+  void initState() {
+    super.initState();
+    _socketBloc = BlocProvider.of<SocketBloc>(context);
+    _socketBloc.add(ConnectEvent());
+  }
+
   final AuthService authService = AuthService();
   final LocationBloc locationBloc = LocationBloc();
   final RequestHttp requestHttp = RequestHttp();
@@ -41,6 +49,26 @@ class _FormPedidoState extends State<FormPedido> {
     });
 
     mapClienteBloc.add(isTrueSlideEvent());
+  }
+
+  void _showDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Pedido en proceso'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: Text('Cerrar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

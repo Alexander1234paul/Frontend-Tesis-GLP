@@ -21,14 +21,13 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
   final IO.Socket socket;
   final String urlMain = Environment.apiUrl;
 
-  SocketBloc()
-      // : socket = IO.io('http://10.0.2.2:3000', <String, dynamic>{
-
-      : socket = IO.io('https://glpapp.fly.dev/', <String, dynamic>{
+  SocketBloc(String token)
+      : socket = IO.io('http://10.0.2.2:3000', <String, dynamic>{
+          // // : socket = IO.io('https://glpapp.fly.dev/', <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': true,
           'forceNew': true,
-          'extraHeaders': {'x-token': 'asmkdmk'}
+          'extraHeaders': {'x-token': token}
         }),
         super(SocketState(ServerStatus.Connecting)) {
     on<ConnectEvent>((event, emit) {
@@ -57,12 +56,15 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
     });
 
     socket.on('lista-pedidos', (payload) {
-      print(payload['pedidos']);
+      // print(payload['pedidos']);
 
       List<dynamic> jsonData = payload['pedidos'] ?? [];
       add(GetPedidosEvent(jsonData));
     });
 
+    socket.on('pedido-en-proceso', (payload) {
+      print(payload);
+    });
     socket.connect();
   }
 
