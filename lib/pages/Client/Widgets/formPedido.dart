@@ -12,7 +12,7 @@ import '../../../services/request.dart';
 import '../../../widgets/roudend_button.dart';
 
 class FormPedido extends StatefulWidget {
-  const FormPedido({super.key});
+  const FormPedido({Key? key}) : super(key: key);
 
   @override
   State<FormPedido> createState() => _FormPedidoState();
@@ -20,12 +20,20 @@ class FormPedido extends StatefulWidget {
 
 class _FormPedidoState extends State<FormPedido> {
   late SocketBloc _socketBloc;
-  @override
-  void initState() {
-    super.initState();
-    _socketBloc = BlocProvider.of<SocketBloc>(context);
-    _socketBloc.add(ConnectEvent());
-  }
+  bool isDialogOpen = false;
+
+
+ @override
+void initState() {
+  super.initState();
+  _socketBloc = BlocProvider.of<SocketBloc>(context);
+  _socketBloc.add(ConnectEvent());
+  isDialogOpen = false; // Restablecer el estado del diálogo al iniciar el formulario
+
+  _socketBloc.pedidoEnProcesoStream.listen((payload) {
+    _showDialog(payload);
+  });
+}
 
   final AuthService authService = AuthService();
   final LocationBloc locationBloc = LocationBloc();
@@ -51,7 +59,9 @@ class _FormPedidoState extends State<FormPedido> {
     mapClienteBloc.add(isTrueSlideEvent());
   }
 
-  void _showDialog(String message) {
+ void _showDialog(String message) {
+  if (!isDialogOpen) {
+    isDialogOpen = true;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -63,6 +73,7 @@ class _FormPedidoState extends State<FormPedido> {
               child: Text('Cerrar'),
               onPressed: () {
                 Navigator.of(context).pop();
+                isDialogOpen = false;
               },
             ),
           ],
@@ -70,6 +81,7 @@ class _FormPedidoState extends State<FormPedido> {
       },
     );
   }
+}
 
   @override
   Widget build(BuildContext context) {

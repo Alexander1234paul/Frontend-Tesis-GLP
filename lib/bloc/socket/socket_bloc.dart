@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
@@ -19,11 +20,12 @@ enum ServerStatus {
 
 class SocketBloc extends Bloc<SocketEvent, SocketState> {
   final IO.Socket socket;
-  final String urlMain = Environment.apiUrl;
+  final StreamController<String> pedidoEnProcesoController =
+      StreamController<String>.broadcast();
+  Stream<String> get pedidoEnProcesoStream => pedidoEnProcesoController.stream;
 
   SocketBloc(String token)
       : socket = IO.io('http://10.0.2.2:3000', <String, dynamic>{
-          // // : socket = IO.io('https://glpapp.fly.dev/', <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': true,
           'forceNew': true,
@@ -56,20 +58,20 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
     });
 
     socket.on('lista-pedidos', (payload) {
-      // print(payload['pedidos']);
-
       List<dynamic> jsonData = payload['pedidos'] ?? [];
       add(GetPedidosEvent(jsonData));
     });
 
     socket.on('pedido-en-proceso', (payload) {
-      print(payload);
+      pedidoEnProcesoController.add(payload.toString());
     });
     socket.connect();
   }
 
   @override
   Future<void> close() {
+    pedidoEnProcesoController.close();
+    socket.disconnect();
     socket.dispose();
     return super.close();
   }

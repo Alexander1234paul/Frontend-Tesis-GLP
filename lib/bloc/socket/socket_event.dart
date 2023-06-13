@@ -16,6 +16,7 @@ class GetPedidosEvent extends SocketEvent {
   @override
   List<Object?> get props => [pedidos];
 }
+
 class ListaPedidosEvent extends SocketEvent {
   List<dynamic> pedidos;
 
