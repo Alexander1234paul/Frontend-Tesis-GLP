@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend_tesis_glp/bloc/MapClient/map_cliente_bloc.dart';
+import 'package:frontend_tesis_glp/bloc/dealer/map_dealer_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/gps/gps_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/location/location_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/map/map_bloc.dart';
@@ -35,14 +36,14 @@ void main() async {
       ),
       BlocProvider(
         create: (context) => SearchBloc(trafficService: TrafficService()),
-      ),  
+      ),
       BlocProvider(create: (context) => MapClienteBloc()),
       BlocProvider(create: (context) => SocketBloc(token!)),
+      BlocProvider(create: (context) => MapDealerBloc()),
     ],
     child: const MyApp(),
   ));
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

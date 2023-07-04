@@ -1,14 +1,9 @@
-import 'dart:async';
-import 'dart:convert';
+// ignore_for_file: constant_identifier_names, library_prefixes
 
+import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-
-import '../../global/environment.dart';
-import '../../models/band.dart';
-import '../../models/pedido.dart';
-
 part 'socket_event.dart';
 part 'socket_state.dart';
 
@@ -24,20 +19,26 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
       StreamController<String>.broadcast();
   Stream<String> get pedidoEnProcesoStream => pedidoEnProcesoController.stream;
 
+  final StreamController<String> notificacionPedidoController =
+      StreamController<String>.broadcast();
+  Stream<String> get notificacionPedidoStream =>
+      notificacionPedidoController.stream;
+
   SocketBloc(String token)
-      : socket = IO.io('http://10.0.2.2:3000', <String, dynamic>{
+      // : socket = IO.io('http://10.0.2.2:3000', <String, dynamic>{
+      : socket = IO.io('https://glpapp.fly.dev', <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': true,
           'forceNew': true,
           'extraHeaders': {'x-token': token}
         }),
-        super(SocketState(ServerStatus.Connecting)) {
+        super(const SocketState(ServerStatus.Connecting)) {
     on<ConnectEvent>((event, emit) {
-      emit(SocketState(ServerStatus.Online));
+      emit(const SocketState(ServerStatus.Online));
     });
 
     on<ConnectionLostEvent>((event, emit) {
-      emit(SocketState(ServerStatus.Offline));
+      emit(const SocketState(ServerStatus.Offline));
     });
 
     on<GetPedidosEvent>((event, emit) {
@@ -53,9 +54,9 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
     });
 
     socket.on('connect_error', (data) {
-      print('Error de conexión: $data');
       // Realizar acciones adicionales según sea necesario
     });
+    socket.emit('obtener-pedidos', {});
 
     socket.on('lista-pedidos', (payload) {
       List<dynamic> jsonData = payload['pedidos'] ?? [];
@@ -65,12 +66,17 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
     socket.on('pedido-en-proceso', (payload) {
       pedidoEnProcesoController.add(payload.toString());
     });
+    socket.on('notificacion-pedido', (payload) {
+      notificacionPedidoController.add(payload.toString());
+    });
     socket.connect();
   }
 
   @override
   Future<void> close() {
     pedidoEnProcesoController.close();
+    notificacionPedidoController.close();
+
     socket.disconnect();
     socket.dispose();
     return super.close();

@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:frontend_tesis_glp/pages/Client/home.dart';
 import 'package:frontend_tesis_glp/pages/Dealer/home.dart';
+import 'package:frontend_tesis_glp/pages/Dealer/map.dart';
 import 'package:frontend_tesis_glp/pages/Select_user.dart';
 import 'package:frontend_tesis_glp/pages/home.dart';
 import 'package:frontend_tesis_glp/pages/loading.dart';
@@ -33,4 +34,5 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'HomeClient': (_) => const HomeClient(),
   'HomeDistribuidor': (_) => const HomeDistribuidor(),
   // 'home': (_) => HomePage(),
+  'mapDealer': (_) => const MapDealer(),
 };

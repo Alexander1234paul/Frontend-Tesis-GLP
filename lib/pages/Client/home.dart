@@ -33,6 +33,7 @@ class _HomeClientState extends State<HomeClient> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       body: BlocBuilder<LocationBloc, LocationState>(
         builder: (context, locationState) {
           if (locationState.lastKnownLocation == null) {
@@ -62,7 +63,7 @@ class _HomeClientState extends State<HomeClient> {
                       },
                     ),
 
-                    //  ManualMarker()
+                     ManualMarker()
                   ],
                 ),
               );

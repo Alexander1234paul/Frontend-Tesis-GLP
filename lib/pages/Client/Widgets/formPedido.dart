@@ -10,6 +10,7 @@ import '../../../bloc/socket/socket_bloc.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/request.dart';
 import '../../../widgets/roudend_button.dart';
+import '../../../widgets/searchbart.dart';
 
 class FormPedido extends StatefulWidget {
   const FormPedido({Key? key}) : super(key: key);
@@ -22,21 +23,24 @@ class _FormPedidoState extends State<FormPedido> {
   late SocketBloc _socketBloc;
   bool isDialogOpen = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _socketBloc = BlocProvider.of<SocketBloc>(context);
+    _socketBloc.add(ConnectEvent());
+    isDialogOpen =
+        false; // Restablecer el estado del diálogo al iniciar el formulario
 
- @override
-void initState() {
-  super.initState();
-  _socketBloc = BlocProvider.of<SocketBloc>(context);
-  _socketBloc.add(ConnectEvent());
-  isDialogOpen = false; // Restablecer el estado del diálogo al iniciar el formulario
-
-  _socketBloc.pedidoEnProcesoStream.listen((payload) {
-    _showDialog(payload);
-  });
-}
+    _socketBloc.pedidoEnProcesoStream.listen((payload) {
+      _showDialog(payload);
+    });
+    _socketBloc.notificacionPedidoStream.listen((payload) {
+      _showDialog(payload);
+    });
+  }
 
   final AuthService authService = AuthService();
-  final LocationBloc locationBloc = LocationBloc();
+  // final LocationBloc locationBloc = LocationBloc();
   final RequestHttp requestHttp = RequestHttp();
   final MapClienteBloc mapClienteBloc = MapClienteBloc();
 
@@ -55,38 +59,35 @@ void initState() {
       'longitud': ubicacion.latitude.toString(),
       'numCilindro': numCilindros.toString(),
     });
-
-    mapClienteBloc.add(isTrueSlideEvent());
   }
 
- void _showDialog(String message) {
-  if (!isDialogOpen) {
-    isDialogOpen = true;
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Pedido en proceso'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              child: Text('Cerrar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                isDialogOpen = false;
-              },
-            ),
-          ],
-        );
-      },
-    );
+  void _showDialog(String message) {
+    if (!isDialogOpen) {
+      isDialogOpen = true;
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Pedido en proceso'),
+            content: Text(message),
+            actions: [
+              TextButton(
+                child: Text('Cerrar'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  isDialogOpen = false;
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
     Responsive responsive = Responsive.of(context);
-    double a = 4;
 
     return BlocBuilder<LocationBloc, LocationState>(
       builder: (context, state) {
@@ -108,7 +109,7 @@ void initState() {
             child: Center(
               child: Column(
                 children: [
-                  SearchBar(),
+                   SearchBarr(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

@@ -32,6 +32,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
 
 // Método que obtiene la ubicación actual del usuario.
   Future getCurrentPosition() async {
+    //Obtenemos la ubicacion actual
     final position = await Geolocator.getCurrentPosition();
     add(OnNewUserLocationEvent(LatLng(position.latitude, position.longitude)));
   }
@@ -41,6 +42,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     add(OnStartFollowingUser());
 
 // Suscripción a la transmisión de posición.
+// Obtener las ubicacion cada que cambia
     positionStream = Geolocator.getPositionStream().listen((event) {
       final position = event;
       add(OnNewUserLocationEvent(

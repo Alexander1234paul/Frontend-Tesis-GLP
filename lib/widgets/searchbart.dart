@@ -7,8 +7,8 @@ import 'package:frontend_tesis_glp/bloc/search/search_bloc.dart';
 import 'package:frontend_tesis_glp/delegates/search_destination_delegate.dart';
 import 'package:frontend_tesis_glp/models/search_results.dart';
 
-class SearchBar extends StatelessWidget {
-  const SearchBar({Key? key}) : super(key: key);
+class SearchBarr extends StatelessWidget {
+  const SearchBarr({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -17,8 +17,3 @@ class GetPedidosEvent extends SocketEvent {
   List<Object?> get props => [pedidos];
 }
 
-class ListaPedidosEvent extends SocketEvent {
-  List<dynamic> pedidos;
-
-  ListaPedidosEvent(this.pedidos);
-}

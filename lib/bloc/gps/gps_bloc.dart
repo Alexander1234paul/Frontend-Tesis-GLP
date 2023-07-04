@@ -52,18 +52,22 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
 
   // Método privado para comprobar si el GPS está habilitado
   Future<bool> _checkGpsStatus() async {
+    // Verificar si el servicio de ubicación está habilitado
     final isEnable = await Geolocator.isLocationServiceEnabled();
 
     // Suscribirse a los cambios de estado del servicio GPS y actualizar el estado
     gpsServiceSubscription =
         Geolocator.getServiceStatusStream().listen((event) {
+      // Comprobar el índice del evento para determinar si el GPS está habilitado
       final isEnabled = (event.index == 1) ? true : false;
+      // Emitir un evento con el estado actualizado del GPS
       add(GpsAndPermissionEvent(
         isGpsEnabled: isEnabled,
         isGpsPermissionGranted: state.isGpsPermissionGranted,
       ));
     });
 
+    // Devolver el estado actual del GPS
     return isEnable;
   }
 
