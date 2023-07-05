@@ -14,6 +14,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart' as material;
 
 import '../../bloc/search/search_bloc.dart';
+import '../../bloc/socket_client/socket_bloc.dart';
 import '../../helpers/show_loading_message.dart';
 import '../../widgets/map_view.dart';
 
@@ -43,11 +44,12 @@ class _MapScreenState extends State<MapDealer> {
     mapBloc = BlocProvider.of<MapBloc>(context);
 
     locationBloc.startFollowingUser();
+    // locationBloc..getCurrentPosition();
 
     start = locationBloc.state.lastKnownLocation;
     end = mapDealerBloc.state.knownLocationClient;
     end = LatLng(0.3484007866763723, -78.1284306196342);
-    print('start');
+    // print('start');
     print(start);
     print('end');
     print(end);
@@ -71,34 +73,60 @@ class _MapScreenState extends State<MapDealer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<LocationBloc, LocationState>(
-        builder: (context, locationState) {
-          if (locationState.lastKnownLocation == null) {
-            return const Center(child: Text('Espere por favor...'));
+      body: BlocListener<LocationBloc, LocationState>(
+        listener: (context, locationState) {
+          if (locationState.lastKnownLocation != null) {
+            print('Location changed: ${locationState.lastKnownLocation}');
+            // Realiza la acción deseada cuando cambie la ubicación
+            final socketBloc = BlocProvider.of<SocketBloc>(context);
+            socketBloc.socket
+                .emit('get-location', locationState.lastKnownLocation);
+            print('end');
           }
-          return BlocBuilder<MapBloc, MapState>(
-            builder: (context, mapState) {
-              Map<String, Polyline> polylines = Map.from(mapState.polylines);
-
-              if (!mapState.showMyRoute) {
-                polylines.removeWhere((key, value) => key == 'myRoute');
-              }
-
-              return SingleChildScrollView(
-                child: Stack(
-                  children: [
-                    MapView(
-                      initialLocation: locationState.lastKnownLocation!,
-                      polylines: polylines.values.toSet(),
-                      markers: mapState.markers.values.toSet(),
-                    ),
-                    // Resto de los widgets
-                  ],
-                ),
-              );
-            },
-          );
         },
+        child: BlocBuilder<LocationBloc, LocationState>(
+          builder: (context, locationState) {
+            if (locationState.lastKnownLocation == null) {
+              return const Center(child: Text('Espere por favor...'));
+            }
+            return BlocBuilder<MapBloc, MapState>(
+              builder: (context, mapState) {
+                Map<String, Polyline> polylines = Map.from(mapState.polylines);
+
+                if (!mapState.showMyRoute) {
+                  polylines.removeWhere((key, value) => key == 'myRoute');
+                }
+                final socketBloc = BlocProvider.of<SocketBloc>(context);
+                //   socketBloc.socket.emit('nuevo-pedido', {
+                //     'token': token,
+                //     'latitud': ubicacion.longitude.toString(),
+                //     'longitud': ubicacion.latitude.toString(),
+                //     'numCilindro': numCilindros.toString(),
+                //   });
+                // }
+                return BlocBuilder<SocketBloc, SocketState>(
+                  builder: (context, stateBloc) {
+                    final socketBloc = BlocProvider.of<SocketBloc>(context);
+                    locationBloc.state.lastKnownLocation;
+
+                    return SingleChildScrollView(
+                      child: Stack(
+                        children: [
+                          MapView(
+                            initialLocation: locationState.lastKnownLocation!,
+                            polylines: polylines.values.toSet(),
+                            markers: mapState.markers.values.toSet(),
+                          ),
+                          // Resto de los widgets
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            );
+          },
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Column(

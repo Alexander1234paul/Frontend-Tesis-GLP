@@ -33,7 +33,6 @@ class _HomeClientState extends State<HomeClient> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: BlocBuilder<LocationBloc, LocationState>(
         builder: (context, locationState) {
           if (locationState.lastKnownLocation == null) {
@@ -54,16 +53,15 @@ class _HomeClientState extends State<HomeClient> {
                       builder: (context, state) {
                         return !state.isSlide
                             ? const Stack(
-                                children:  [
+                                children: [
                                   FormPedido(),
                                   BtnElevate(),
                                 ],
                               )
-                            : const Slide();
+                            : Slide();
                       },
                     ),
-
-                     ManualMarker()
+                    ManualMarker()
                   ],
                 ),
               );

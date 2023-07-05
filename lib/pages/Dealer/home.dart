@@ -9,7 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
 import '../../bloc/location/location_bloc.dart';
-import '../../bloc/socket/socket_bloc.dart';
+import '../../bloc/socket_client/socket_bloc.dart';
 import '../../services/auth_service.dart';
 
 class HomeDistribuidor extends StatefulWidget {

@@ -6,7 +6,7 @@ import 'package:frontend_tesis_glp/widgets/input_text_login.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../bloc/location/location_bloc.dart';
-import '../../../bloc/socket/socket_bloc.dart';
+import '../../../bloc/socket_client/socket_bloc.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/request.dart';
 import '../../../widgets/roudend_button.dart';

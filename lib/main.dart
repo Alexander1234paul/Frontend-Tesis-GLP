@@ -7,7 +7,7 @@ import 'package:frontend_tesis_glp/bloc/gps/gps_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/location/location_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/map/map_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/search/search_bloc.dart';
-import 'package:frontend_tesis_glp/bloc/socket/socket_bloc.dart';
+import 'package:frontend_tesis_glp/bloc/socket_client/socket_bloc.dart';
 import 'package:frontend_tesis_glp/routes/routes.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend_tesis_glp/services/traffic_services.dart';

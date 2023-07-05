@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 
 import 'dart:convert';
 
-import '../bloc/socket/socket_bloc.dart';
 import '../models/places_models.dart';
 import 'auth_service.dart';
 

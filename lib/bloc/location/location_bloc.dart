@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' show LatLng;
+
+import '../socket_client/socket_bloc.dart';
 
 part 'location_event.dart';
 part 'location_state.dart';
@@ -41,10 +44,20 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   void startFollowingUser() {
     add(OnStartFollowingUser());
 
+    // final socketBloc = BlocProvider.of<SocketBloc>();
+    // socketBloc.socket.emit('nuevo-pedido', {
+    //   'token': token,
+    //   'latitud': ubicacion.longitude.toString(),
+    //   'longitud': ubicacion.latitude.toString(),
+    //   'numCilindro': numCilindros.toString(),
+    // });
+
 // Suscripción a la transmisión de posición.
 // Obtener las ubicacion cada que cambia
     positionStream = Geolocator.getPositionStream().listen((event) {
       final position = event;
+      print(position);
+
       add(OnNewUserLocationEvent(
           LatLng(position.latitude, position.longitude)));
     });

@@ -69,6 +69,9 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
     socket.on('notificacion-pedido', (payload) {
       notificacionPedidoController.add(payload.toString());
     });
+    socket.on('set-location', (payload) {
+      print(payload);
+    });
     socket.connect();
   }
 
