@@ -29,7 +29,7 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
   late SocketBloc _socketBloc; // Instancia del bloque de sockets
   bool _showPopup = false; // Variable para mostrar/ocultar ventana emergente
   int _countdown = 10; // Contador para la cuenta regresiva
-  late Timer _timer; 
+  late Timer _timer;
   // Temporizador para la cuenta regresiva
 
   @override
@@ -42,15 +42,11 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
     _startCountdownTimer();
 
     locationBloc = BlocProvider.of<LocationBloc>(context);
-        mapDealerBloc = BlocProvider.of<MapDealerBloc>(context);
+    mapDealerBloc = BlocProvider.of<MapDealerBloc>(context);
 
     // locationBloc.getCurrentPosition();
-    locationBloc
-        .startFollowingUser(); 
-        // Iniciar el temporizador de cuenta regresiva
-      
-
-        
+    locationBloc.startFollowingUser();
+    // Iniciar el temporizador de cuenta regresiva
   }
 
   // Método para alternar la selección izquierda/derecha
@@ -138,7 +134,9 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
     double longitud =
         double.parse(registro['Cliente']['location'][0].toString());
     LatLng locationClient = LatLng(latitud, longitud);
-    print(locationClient);
+    String idDocument = registro['Cliente']['idCliente'];
+    print('registroxd');
+    print(registro);
 
     final socketBloc = BlocProvider.of<SocketBloc>(context);
     mapDealerBloc = BlocProvider.of<MapDealerBloc>(context);
@@ -150,9 +148,7 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
       'idPedido': registro['id'],
     });
 
-    // Aquí puedes utilizar la variable locationClient como necesites
-    // por ejemplo, puedes enviarla al MapDealerBloc como un evento
-    mapDealerBloc.add(locationCliente(locationClient));
+    mapDealerBloc.add(locationCliente(locationClient, idDocument));
 
     _closePopup();
 

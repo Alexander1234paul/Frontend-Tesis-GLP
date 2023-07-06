@@ -3,7 +3,6 @@ import 'package:frontend_tesis_glp/global/environment.dart';
 import 'package:frontend_tesis_glp/pages/Client/home.dart';
 import 'package:frontend_tesis_glp/pages/Dealer/home.dart';
 import 'package:frontend_tesis_glp/pages/Login/Widgets/form_start.dart';
-import 'package:frontend_tesis_glp/pages/cliente.dart';
 import 'package:frontend_tesis_glp/pages/ubicacion.dart';
 import 'package:frontend_tesis_glp/utils/responsive.dart';
 import 'package:frontend_tesis_glp/widgets/input_text_login.dart';
@@ -69,20 +68,49 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (responseData['typeUser'] == 'Distribuidor') {
         // ignore: use_build_context_synchronously
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const HomeDistribuidor()));
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => WillPopScope(
+                    onWillPop: () async => false,
+                    child: HomeDistribuidor(),
+                  )),
+        );
+        // Navigator.push(context,
+        //     MaterialPageRoute(builder: (context) => const HomeDistribuidor()));
       } else {
         // ignore: use_build_context_synchronously
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const HomeClient()));
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => WillPopScope(
+                    onWillPop: () async => false,
+                    child: HomeClient(),
+                  )),
+        );
+
+        // Navigator.push(context,
+        //     MaterialPageRoute(builder: (context) => const HomeClient()));
       }
 
       _guardarToken(responseData['token']);
       return responseData['message'];
     } else if (response.statusCode == 201) {
       // ignore: use_build_context_synchronously
+
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const ubicacion()));
+        context,
+        MaterialPageRoute(
+            builder: (context) => WillPopScope(
+                  onWillPop: () async => false,
+                  child: ubicacion(),
+                )),
+      );
+
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => const ubicacion()));
       _guardarToken(responseData['token']);
       return responseData['message'];
     } else {

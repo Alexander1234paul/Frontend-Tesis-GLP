@@ -1,5 +1,10 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend_tesis_glp/pages/Client/ayuda.dart';
 import 'package:frontend_tesis_glp/pages/Client/configuraciones.dart';
 import 'package:frontend_tesis_glp/pages/Client/historial_pedidos.dart';
@@ -7,11 +12,40 @@ import 'package:frontend_tesis_glp/pages/Client/security_protection.dart';
 import 'package:frontend_tesis_glp/pages/Dealer/verificacion.dart';
 
 import '../../../bloc/MapClient/map_cliente_bloc.dart';
+import '../../../global/environment.dart';
 
 class Slide extends StatelessWidget {
   const Slide({super.key});
   @override
   Widget build(BuildContext context) {
+    Future<String?> getToken() async {
+      const storage = FlutterSecureStorage();
+      final token = await storage.read(key: 'token');
+      return token;
+    }
+
+    Future<String> addTypeUser(BuildContext context, String typeUser) async {
+      final String urlMain = Environment.apiUrl;
+      final url = Uri.parse(urlMain + 'addTypeUser');
+      // final url = Uri.parse('https://app-glp.herokuapp.com/addTypeUser');
+
+      String? token = await getToken();
+      final response = await http.post(url,
+          headers: {'Authorization': 'Bearer $token'},
+          body: {'typeUser': typeUser, 'token': token});
+      var responseData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) =>
+                const VerificacionDatosScreen()));
+        return responseData['message'];
+      } else {
+        return responseData['message'];
+      }
+    }
+
     final screenSize = MediaQuery.of(context).size;
     final mapClienteBloc = BlocProvider.of<MapClienteBloc>(context);
 
@@ -111,9 +145,8 @@ class Slide extends StatelessWidget {
 
               OutlinedButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          const VerificacionDatosScreen()));
+                  String message;
+                  message = addTypeUser(context, 'Distribuidor') as String;
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Color.fromARGB(255, 78, 14, 14),

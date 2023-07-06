@@ -3,7 +3,6 @@ import 'package:frontend_tesis_glp/models/regsiter_response.dart';
 import 'package:frontend_tesis_glp/pages/Client/home.dart';
 import 'package:frontend_tesis_glp/pages/Dealer/home.dart';
 import 'package:frontend_tesis_glp/pages/Start.dart';
-import 'package:frontend_tesis_glp/pages/cliente.dart';
 import 'package:frontend_tesis_glp/pages/maps/loading-screen.dart';
 import 'package:frontend_tesis_glp/services/auth_service.dart';
 import 'package:http/http.dart';

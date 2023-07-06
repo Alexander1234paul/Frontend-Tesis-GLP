@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend_tesis_glp/pages/Dealer/datos_personales/datos_cedula.dart';
 import 'package:frontend_tesis_glp/pages/Dealer/datos_personales/datos_vehiculo.dart';
 import 'package:frontend_tesis_glp/pages/Dealer/datos_personales/informacion_basica.dart';
+import 'package:frontend_tesis_glp/pages/Dealer/home.dart';
+import 'package:frontend_tesis_glp/pages/Dealer/map.dart';
 import 'datos_personales/datos_licencia.dart';
 
 class VerificacionDatosScreen extends StatelessWidget {
@@ -20,8 +22,15 @@ class VerificacionDatosScreen extends StatelessWidget {
             style: TextButton.styleFrom(
               textStyle: const TextStyle(fontSize: 20),
             ),
-            onPressed: () {},
-            child: const Text('Cerrar'),
+            onPressed: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => const HomeDistribuidor(),
+                ),
+                (route) => false, // Remove all previous routes
+              );
+            },
+            child: const Text('Omitir'),
           ),
         ],
       ),

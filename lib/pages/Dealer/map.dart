@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend_tesis_glp/bloc/blocs.dart';
 import 'package:frontend_tesis_glp/bloc/dealer/map_dealer_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/location/location_bloc.dart';
@@ -17,7 +18,6 @@ import '../../bloc/search/search_bloc.dart';
 import '../../bloc/socket_client/socket_bloc.dart';
 import '../../helpers/show_loading_message.dart';
 import '../../widgets/map_view.dart';
-
 class MapDealer extends StatefulWidget {
   const MapDealer({Key? key}) : super(key: key);
 
@@ -31,9 +31,6 @@ class _MapScreenState extends State<MapDealer> {
   late SearchBloc searchBloc;
   late MapBloc mapBloc;
 
-  LatLng? start;
-  LatLng? end;
-
   @override
   void initState() {
     super.initState();
@@ -44,16 +41,10 @@ class _MapScreenState extends State<MapDealer> {
     mapBloc = BlocProvider.of<MapBloc>(context);
 
     locationBloc.startFollowingUser();
-    // locationBloc..getCurrentPosition();
 
-    start = locationBloc.state.lastKnownLocation;
-    end = mapDealerBloc.state.knownLocationClient;
-    end = LatLng(0.3484007866763723, -78.1284306196342);
-    // print('start');
-    print(start);
-    print('end');
-    print(end);
-    _drawRoute();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _initializeMap();
+    });
   }
 
   @override
@@ -62,74 +53,84 @@ class _MapScreenState extends State<MapDealer> {
     super.dispose();
   }
 
-  Future<void> _drawRoute() async {
-    // showLoadingMessage(context);
-    final destination = await searchBloc.getCoorsStartToEnd(start!, end!);
+  Future<void> _initializeMap() async {
+    final locationState = locationBloc.state;
+    final mapState = mapBloc.state;
+    final dealerState = mapDealerBloc.state;
+
+    if (locationState.lastKnownLocation == null ||
+        mapState.polylines.isEmpty ||
+        dealerState.knownLocationClient == null) {
+      await Future.delayed(const Duration(seconds: 1));
+      _initializeMap();
+    } else {
+      _drawRoute(locationState.lastKnownLocation!, dealerState.knownLocationClient!);
+    }
+  }
+
+  Future<void> _drawRoute(LatLng start, LatLng end) async {
+    final destination = await searchBloc.getCoorsStartToEnd(start, end);
     await mapBloc.drawRoutePolyline(destination);
     searchBloc.add(OnDeactivateManualMarkerEvent());
-    //  Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<LocationBloc, LocationState>(
-        listener: (context, locationState) {
-          if (locationState.lastKnownLocation != null) {
-            print('Location changed: ${locationState.lastKnownLocation}');
-            // Realiza la acción deseada cuando cambie la ubicación
+      body: BlocConsumer<MapDealerBloc, MapDealerState>(
+        listener: (context, state) {
+          if (state.idDocument != null) {
+            final locationState = locationBloc.state;
             final socketBloc = BlocProvider.of<SocketBloc>(context);
-            socketBloc.socket
-                .emit('get-location', locationState.lastKnownLocation);
-            print('end');
+            socketBloc.socket.emit('get-location', {
+              'idDocument': state.idDocument,
+              'location': locationState.lastKnownLocation,
+            });
           }
         },
-        child: BlocBuilder<LocationBloc, LocationState>(
-          builder: (context, locationState) {
-            if (locationState.lastKnownLocation == null) {
-              return const Center(child: Text('Espere por favor...'));
-            }
-            return BlocBuilder<MapBloc, MapState>(
-              builder: (context, mapState) {
-                Map<String, Polyline> polylines = Map.from(mapState.polylines);
-
-                if (!mapState.showMyRoute) {
-                  polylines.removeWhere((key, value) => key == 'myRoute');
-                }
+        builder: (context, state) {
+          return BlocConsumer<LocationBloc, LocationState>(
+            listener: (context, locationState) {
+              if (locationState.lastKnownLocation != null) {
                 final socketBloc = BlocProvider.of<SocketBloc>(context);
-                //   socketBloc.socket.emit('nuevo-pedido', {
-                //     'token': token,
-                //     'latitud': ubicacion.longitude.toString(),
-                //     'longitud': ubicacion.latitude.toString(),
-                //     'numCilindro': numCilindros.toString(),
-                //   });
-                // }
-                return BlocBuilder<SocketBloc, SocketState>(
-                  builder: (context, stateBloc) {
-                    final socketBloc = BlocProvider.of<SocketBloc>(context);
-                    locationBloc.state.lastKnownLocation;
+                socketBloc.socket.emit('get-location', {
+                  'idDocument': state.idDocument,
+                  'location': locationState.lastKnownLocation,
+                });
+              }
+            },
+            builder: (context, locationState) {
+              if (locationState.lastKnownLocation == null) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-                    return SingleChildScrollView(
-                      child: Stack(
-                        children: [
-                          MapView(
-                            initialLocation: locationState.lastKnownLocation!,
-                            polylines: polylines.values.toSet(),
-                            markers: mapState.markers.values.toSet(),
-                          ),
-                          // Resto de los widgets
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-            );
-          },
-        ),
+              return BlocBuilder<MapBloc, MapState>(
+                builder: (context, mapState) {
+                  final polylines = mapState.polylines;
+                  if (!mapState.showMyRoute) {
+                    polylines.removeWhere((key, value) => key == 'myRoute');
+                  }
+
+                  return SingleChildScrollView(
+                    child: Stack(
+                      children: [
+                        MapView(
+                          initialLocation: locationState.lastKnownLocation!,
+                          polylines: polylines.values.toSet(),
+                          markers: mapState.markers.values.toSet(),
+                        ),
+                        // Resto de los widgets
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: Column(
+     floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: const [
           BtnToggleUserRoute(),

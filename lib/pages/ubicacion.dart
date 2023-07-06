@@ -49,12 +49,18 @@ class ubicacion extends StatelessWidget {
         'token': token
       });
       // ignore: unused_local_variable
-      var responseData =
-          json.decode(response.body); // ignore: use_build_context_synchronously
+      var responseData = json.decode(response.body);
+      // ignore: use_build_context_synchronously
+
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const ubicacion_exacta()),
+        MaterialPageRoute(
+            builder: (context) => WillPopScope(
+                  onWillPop: () async => false,
+                  child: ubicacion_exacta(),
+                )),
       );
+
       return '';
     } catch (e) {
       return '';

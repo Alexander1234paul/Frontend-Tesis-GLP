@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_tesis_glp/pages/cliente.dart';
 import 'package:frontend_tesis_glp/pages/reg_email.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -40,51 +39,60 @@ class _RegNamesState extends State<RegNames> {
 
     if (response.statusCode == 200) {
       // ignore: use_build_context_synchronously
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const RegEmail()));
+Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => WillPopScope(
+                onWillPop: () async => false,
+                child: RegEmail(),
+              )),
+    );
+
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => const RegEmail()));
 
       return responseData['message'];
     } else {
       return responseData['message'];
     }
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      body: Container(
-        padding: const EdgeInsets.all(30.0),
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.white,
+    body: SingleChildScrollView(
+      padding: EdgeInsets.all(30.0),
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(01.0),
-              child: const Text(
+              margin: EdgeInsets.all(10.0),
+              child: Text(
                 '!Bienvenidos a Gas Delivery¡',
                 style: TextStyle(fontSize: 20.0),
                 textAlign: TextAlign.center,
               ),
             ),
             Container(
-              padding: const EdgeInsets.all(18.0),
-              child: const Text(
+              margin: EdgeInsets.all(10.0),
+              child: Text(
                 'Conozcámonos',
                 style: TextStyle(fontSize: 20.0),
                 textAlign: TextAlign.center,
               ),
             ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextField(
+            SizedBox(height: 20.0),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30.0),
+                  child: TextField(
                     controller: _nombre,
-                    enableInteractiveSelection: false,
-                    autofocus: true,
-                    style: const TextStyle(fontSize: 18),
-                    decoration: const InputDecoration(
+                    style: TextStyle(fontSize: 18),
+                    decoration: InputDecoration(
                       hintText: 'Nombre',
                       contentPadding: EdgeInsets.symmetric(
                         vertical: 12.0,
@@ -92,13 +100,14 @@ class _RegNamesState extends State<RegNames> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16.0),
-                  TextField(
+                ),
+                SizedBox(height: 16.0),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30.0),
+                  child: TextField(
                     controller: _apellido,
-                    enableInteractiveSelection: false,
-                    autofocus: true,
-                    style: const TextStyle(fontSize: 18),
-                    decoration: const InputDecoration(
+                    style: TextStyle(fontSize: 18),
+                    decoration: InputDecoration(
                       hintText: 'Apellido',
                       contentPadding: EdgeInsets.symmetric(
                         vertical: 12.0,
@@ -106,32 +115,28 @@ class _RegNamesState extends State<RegNames> {
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(height: 10.0),
+            SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
                 addNames(context, _nombre.text, _apellido.text);
               },
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
+                primary: Color.fromARGB(255, 167, 33, 56),
+                onPrimary: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                      25.0), // Radio de borde redondeado de 20.0
-                  side:
-                      const BorderSide(color: Color.fromARGB(255, 167, 33, 56)),
-// Borde del botón de color marrón
+                  borderRadius: BorderRadius.circular(25.0),
                 ),
-                backgroundColor: const Color.fromARGB(
-                    255, 167, 33, 56), // Color de fondo marrón
-                minimumSize: const Size(300.0, 50.0), // Tamaño mínimo de 200x50
+                minimumSize: Size(300.0, 50.0),
               ),
-              child: const Text('Siguiente'),
+              child: Text('Siguiente'),
             ),
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

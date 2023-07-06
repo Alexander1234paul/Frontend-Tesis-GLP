@@ -35,16 +35,22 @@ class ubicacion_exacta extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40.0),
-            ElevatedButton(   
+            ElevatedButton(
               onPressed: () {
                 // Acción a realizar cuando se presiona el botón
+
                 Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const select_user()),
-      );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WillPopScope(
+                            onWillPop: () async => false,
+                            child: select_user(),
+                          )),
+                );
               },
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, shape: RoundedRectangleBorder(
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(
                       25.0), // Radio de borde redondeado de 20.0
                   side: const BorderSide(

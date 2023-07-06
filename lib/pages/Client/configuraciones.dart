@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:frontend_tesis_glp/pages/Client/Widgets/acerca_app.dart';
 import 'package:frontend_tesis_glp/pages/Client/Widgets/cambio_numero.dart';
 
-
 class InfoDialogScreen extends StatefulWidget {
   const InfoDialogScreen({Key? key}) : super(key: key);
+
   @override
-  _InfoDialogScreen createState() => _InfoDialogScreen();
+  _InfoDialogScreenState createState() => _InfoDialogScreenState();
 }
 
-class _InfoDialogScreen extends State<InfoDialogScreen> {
+class _InfoDialogScreenState extends State<InfoDialogScreen> {
   bool valNotifi1 = false;
-  onChangeMethod(bool newValue) {
+
+  void onChangeMethod(bool newValue) {
     setState(() {
       valNotifi1 = newValue;
     });
@@ -21,7 +22,6 @@ class _InfoDialogScreen extends State<InfoDialogScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // drawer: NavBar(),
       appBar: AppBar(
         backgroundColor: Color(0xFFA72138),
         title: const Text('Configuraciones'),
@@ -37,30 +37,16 @@ class _InfoDialogScreen extends State<InfoDialogScreen> {
             ListTile(
               title: Text('Cambiar número'),
               trailing: Icon(Icons.arrow_forward_ios_outlined),
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title:
-                          Text('¿Está seguro de cambiar su número de celular?'),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const CambioNumeroScreen()));
-                          },
-                          child: Text('ACEPTAR'),
-                        ),
-                      ],
-                    );
-                  },
+              onTap: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const CambioNumeroScreen(),
+                  ),
                 );
+                if (result == 'completed') {
+                  // Se completó el cambio de número, realizar acciones adicionales si es necesario
+                }
               },
             ),
             cambioModoOscuro('Cambio modo oscuro', valNotifi1, onChangeMethod),
@@ -68,9 +54,11 @@ class _InfoDialogScreen extends State<InfoDialogScreen> {
               title: Text('Acerca de la aplicación'),
               trailing: Icon(Icons.arrow_forward_ios_outlined),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        const AcercaAppScreen()));
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const AcercaAppScreen(),
+                  ),
+                );
               },
             ),
             Divider(
@@ -89,7 +77,6 @@ class _InfoDialogScreen extends State<InfoDialogScreen> {
     );
   }
 
-//Esta clase sirve para crear un boton de switch
   Padding cambioModoOscuro(String title, bool value, Function onChangeMethod) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -100,8 +87,6 @@ class _InfoDialogScreen extends State<InfoDialogScreen> {
             title,
             style: TextStyle(
               fontSize: 16,
-              // fontWeight: FontWeight.w500,
-              // color: Colors.grey[600],
             ),
           ),
           Transform.scale(

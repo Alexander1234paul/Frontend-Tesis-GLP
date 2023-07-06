@@ -25,8 +25,8 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
       notificacionPedidoController.stream;
 
   SocketBloc(String token)
-      // : socket = IO.io('http://10.0.2.2:3000', <String, dynamic>{
-      : socket = IO.io('https://glpapp.fly.dev', <String, dynamic>{
+      : socket = IO.io('http://10.0.2.2:3000', <String, dynamic>{
+      // : socket = IO.io('https://glpapp.fly.dev', <String, dynamic>{
           'transports': ['websocket'],
           'autoConnect': true,
           'forceNew': true,
@@ -60,7 +60,7 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
 
     socket.on('lista-pedidos', (payload) {
       List<dynamic> jsonData = payload['pedidos'] ?? [];
-      add(GetPedidosEvent(jsonData));
+      add(GetPedidosEvent(jsonData)); 
     });
 
     socket.on('pedido-en-proceso', (payload) {
@@ -70,7 +70,7 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
       notificacionPedidoController.add(payload.toString());
     });
     socket.on('set-location', (payload) {
-      print(payload);
+      print(' Escuchando la ubicacion del distirbuidor $payload');
     });
     socket.connect();
   }

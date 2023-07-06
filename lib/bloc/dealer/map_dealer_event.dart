@@ -8,6 +8,7 @@ abstract class MapDealerEvent extends Equatable {
 }
 class locationCliente extends MapDealerEvent {
   final LatLng newLocation;
+  final String idDocument;
   
-  const locationCliente(this.newLocation);
+  const locationCliente(this.newLocation, this.idDocument);
 }

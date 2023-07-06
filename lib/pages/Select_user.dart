@@ -28,8 +28,17 @@ class select_user extends StatelessWidget {
 
     if (response.statusCode == 200) {
       // ignore: use_build_context_synchronously
+
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const RegNames()));
+      context,
+      MaterialPageRoute(
+          builder: (context) => WillPopScope(
+                onWillPop: () async => false,
+                child: RegNames(),
+              )),
+    );
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => const RegNames()));
 
       return responseData['message'];
     } else {

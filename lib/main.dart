@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'sans'),
       title: 'Material App',
-      initialRoute: 'loading',
+      initialRoute: 'reg_names',
       // initialRoute: 'loadMap',
       // initialRoute: 'login',
 
