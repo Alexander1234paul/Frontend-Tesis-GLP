@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_tesis_glp/pages/Client/Widgets/acerca_app.dart';
 import 'package:frontend_tesis_glp/pages/Client/Widgets/cambio_numero.dart';
+import 'package:frontend_tesis_glp/pages/Start.dart';
+
+import '../../services/auth_service.dart';
 
 class InfoDialogScreen extends StatefulWidget {
   const InfoDialogScreen({Key? key}) : super(key: key);
@@ -12,7 +15,7 @@ class InfoDialogScreen extends StatefulWidget {
 
 class _InfoDialogScreenState extends State<InfoDialogScreen> {
   bool valNotifi1 = false;
-
+  final auth = AuthService();
   void onChangeMethod(bool newValue) {
     setState(() {
       valNotifi1 = newValue;
@@ -41,7 +44,8 @@ class _InfoDialogScreenState extends State<InfoDialogScreen> {
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => const CambioNumeroScreen(),
+                    builder: (BuildContext context) =>
+                        const CambioNumeroScreen(),
                   ),
                 );
                 if (result == 'completed') {
@@ -69,7 +73,17 @@ class _InfoDialogScreenState extends State<InfoDialogScreen> {
               title: Text('Cerrar sesión'),
               trailing: Icon(Icons.logout),
               iconColor: Colors.blue,
-              onTap: () {},
+              onTap: () {
+                auth.deleteToken();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WillPopScope(
+                            onWillPop: () async => false,
+                            child: LoginScreen(),
+                          )),
+                );
+              },
             ),
           ],
         ),

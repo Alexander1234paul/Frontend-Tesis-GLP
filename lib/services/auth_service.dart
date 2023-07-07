@@ -33,49 +33,7 @@ class AuthService {
     await storage.delete(key: 'token');
   }
 
-  // Future<bool> login(String email, String password) async {
-  //   this.autenticando = true;
-
-  //   final data = {'email': email, 'password': password};
-
-  //   final resp = await http.post('${Environment.apiUrl}/login',
-  //       body: jsonEncode(data), headers: {'Content-Type': 'application/json'});
-
-  //   this.autenticando = false;
-
-  //   if (resp.statusCode == 200) {
-  //     final loginResponse = loginResponseFromJson(resp.body);
-  //     this.usuario = loginResponse.usuario;
-
-  //     await this._guardarToken(loginResponse.token);
-
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
-  // Future register(String nombre, String email, String password) async {
-  //   this.autenticando = true;
-
-  //   final data = {'nombre': nombre, 'email': email, 'password': password};
-
-  //   final resp = await http.post('${Environment.apiUrl}/login/new' as Uri,
-  //       body: jsonEncode(data), headers: {'Content-Type': 'application/json'});
-
-  //   this.autenticando = false;
-
-  //   if (resp.statusCode == 200) {
-  //     final loginResponse = loginResponseFromJson(resp.body);
-  //     this.usuario = loginResponse.usuario;
-  //     await this._guardarToken(loginResponse.token);
-
-  //     return true;
-  //   } else {
-  //     final respBody = jsonDecode(resp.body);
-  //     return respBody['msg'];
-  //   }
-  // }
+  
 
   Future<RegisterResult> isLoggedIn() async {
     final url = Uri.parse(urlMain + 'renewtoken');

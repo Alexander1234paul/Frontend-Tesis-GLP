@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend_tesis_glp/bloc/blocs.dart';
 import 'package:frontend_tesis_glp/bloc/dealer/map_dealer_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/location/location_bloc.dart';
+import 'package:frontend_tesis_glp/pages/Dealer/Widgets/slide.dart';
 import 'package:frontend_tesis_glp/widgets/btn_follow_user.dart';
 import 'package:frontend_tesis_glp/widgets/btn_location.dart';
 import 'package:frontend_tesis_glp/widgets/btn_toggle_user_route.dart';
@@ -120,6 +121,7 @@ class _MapScreenState extends State<MapDealer> {
                           markers: mapState.markers.values.toSet(),
                         ),
                         // Resto de los widgets
+                      
                       ],
                     ),
                   );

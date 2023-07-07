@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend_tesis_glp/bloc/dealer/map_dealer_bloc.dart';
+import 'package:frontend_tesis_glp/pages/Dealer/Widgets/slide.dart';
 import 'package:frontend_tesis_glp/pages/Dealer/map.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -176,44 +177,63 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SocketBloc, SocketState>(
+    return BlocConsumer<SocketBloc, SocketState>(
       listener: (context, state) {
         if (state.pedidos.isNotEmpty) {
-          _showPopupWindow(state.pedidos
-              .last); // Mostrar la ventana emergente con el último pedido
+          _showPopupWindow(state.pedidos.last);
         }
       },
-      child: Scaffold(
-        appBar: appBar(), // Construir la barra de aplicaciones
-        body: BlocBuilder<SocketBloc, SocketState>(
-          builder: (context, state) {
-            final List<dynamic> pedidos = state.pedidos ?? [];
-            return ListView.builder(
-              itemCount: pedidos.length,
-              itemBuilder: (context, index) => ListTile(
-                leading: CircleAvatar(
-                  child: Text(pedidos[index]['estado'].substring(0, 2)),
-                  backgroundColor: Colors.blue[100],
-                ),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('${pedidos[index]['Cliente']['nombre']}'),
-                    Text('Fecha: ${pedidos[index]['Cliente']['fecha']}'),
-                    Text(
-                        'Cilindros: ${pedidos[index]['Cliente']['numCilindro']}'),
-                  ],
-                ),
-                trailing: Text(
-                  '${pedidos[index]['estado']}',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-            );
-          },
-        ),
-        bottomNavigationBar: BottonBar(), // Barra de navegación inferior
-      ),
+      builder: (context, state) {
+        final List<dynamic> pedidos = state.pedidos ?? [];
+        return Scaffold(
+          appBar: appBar(),
+          body: BlocBuilder<MapDealerBloc, MapDealerState>(
+            builder: (context, state) {
+              return Stack(
+                children: [
+                  ListView.builder(
+                    itemCount: pedidos.length,
+                    itemBuilder: (context, index) => ListTile(
+                      leading: CircleAvatar(
+                        child: Text(pedidos[index]['estado'].substring(0, 2)),
+                        backgroundColor: Colors.blue[100],
+                      ),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('${pedidos[index]['Cliente']['nombre']}'),
+                          Text('Fecha: ${pedidos[index]['Cliente']['fecha']}'),
+                          Text(
+                              'Cilindros: ${pedidos[index]['Cliente']['numCilindro']}'),
+                        ],
+                      ),
+                      trailing: Text(
+                        '${pedidos[index]['estado']}',
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ),
+                  if (_showPopup)
+                    Positioned(
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: _closePopup,
+                        child: Container(
+                          color: Colors.black.withOpacity(0.5),
+                        ),
+                      ),
+                    ),
+                  if (state.isSlide!) SliderDealer()
+                ],
+              );
+            },
+          ),
+          bottomNavigationBar: const BottonBar(),
+        );
+      },
     );
   }
 
@@ -224,6 +244,7 @@ class _HomeDistribuidorState extends State<HomeDistribuidor> {
       leading: IconButton(
         icon: const Icon(Icons.menu),
         onPressed: () {
+          mapDealerBloc.add(stateTrueDealer());
           // Acción al presionar el botón de menú (izquierda)
         },
       ),

@@ -4,6 +4,7 @@ import 'package:frontend_tesis_glp/helpers/mostrar_alerta.dart';
 import 'package:frontend_tesis_glp/models/regsiter_response.dart';
 import 'package:frontend_tesis_glp/pages/Client/home.dart';
 import 'package:frontend_tesis_glp/pages/Dealer/home.dart';
+import 'package:frontend_tesis_glp/pages/loading.dart';
 import 'package:frontend_tesis_glp/pages/ubicacion.dart';
 import 'package:frontend_tesis_glp/services/request.dart';
 import 'package:frontend_tesis_glp/utils/local_storage.dart';
@@ -78,11 +79,11 @@ class _formStartState extends State<formStart> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const HomeDistribuidor()));
+                  builder: (context) => const LoadingPage()));
         } else {
           // ignore: use_build_context_synchronously
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const HomeClient()));
+              MaterialPageRoute(builder: (context) => const LoadingPage()));
         }
       } else if (response.statusCode == 201) {
         // Usuario nuevo

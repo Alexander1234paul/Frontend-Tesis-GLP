@@ -7,7 +7,11 @@ part 'map_dealer_state.dart';
 
 class MapDealerBloc extends Bloc<MapDealerEvent, MapDealerState> {
   MapDealerBloc() : super(const MapDealerState()) {
-    on<locationCliente>((event, emit) =>
-        emit(state.copyWith(knownLocationClient: event.newLocation,idDocument: event.idDocument)));
+    on<locationCliente>((event, emit) => emit(state.copyWith(
+        knownLocationClient: event.newLocation, idDocument: event.idDocument)));
+    on<stateTrueDealer>((event, emit) => emit(state.copyWith(
+        isSlide: true)));
+    on<stateFalseDealer>((event, emit) => emit(state.copyWith(
+        isSlide: false)));
   }
 }
